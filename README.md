@@ -253,7 +253,7 @@ Latest docs about raknet protocol
 |ReliableSequenced|4|Yes|Yes|Yes|
 |UnreliableWithAckReceipt|5|No|No|No|
 |ReliableWithAckReceipt|6|Yes|No|No|
-|ReliableOrderedWithAckReceipt|6|Yes|Yes|No|
+|ReliableOrderedWithAckReceipt|7|Yes|Yes|No|
 
 ### Nack or Ack
 |Field|Field Type|Field Type Endianness|
