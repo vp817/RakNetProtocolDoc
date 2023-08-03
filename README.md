@@ -228,7 +228,7 @@ latest doc about raknet protocol
 |sequencedFrameIndex|uint24|Little Endian|Only if sequenced|
 |order|FrameOrder|None|Only if ordered|
 |fragment|FrameFragment|None|Only if fragmented|
-|buffer|Buffer|The buffer can be whatever language you are working on type of buffer you would basically read out of it the "size" you got up there|
+|buffer|Buffer|None|The buffer can be whatever language you are working on type of buffer you would basically read out of it the "size" you got up there|
 
 #### The "FrameOrder" Contents
 |Field|Field Type|Field Type Endianness|
