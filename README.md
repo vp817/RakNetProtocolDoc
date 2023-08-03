@@ -12,7 +12,7 @@ latest doc about raknet protocol
 |magic|16|The magic is an uint8 array and its contents is: [0x00, 0xFF, 0xFF, 0x00, 0xFE, 0xFE, 0xFE, 0xFE, 0xFD, 0xFD, 0xFD, 0xFD, 0x12, 0x34, 0x56, 0x78]|
 |pad-with-zero|your choice|You will fill null byte with the size of your choice as the size of the fill and on reading just get the remaining bytes that are zero size but if the pad-with-zero is what you wrote at the last place just get the remaining bytes length|
 |bool|0-1|read uint8 and if you get 0x00 then return false. 0x01 = true|
-|address|7|1 uint8 for address version 4 uint8's is for the address 1 uint16 for the port|
+|address|7|1 uint8 for address version 4 uint8's is for the address ip 1 uint16 for the address port|
 
 # Packets
 ### Identifiers
