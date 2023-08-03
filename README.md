@@ -174,8 +174,8 @@ latest doc about raknet protocol
 |-----|---------|-------------------|
 |id|uint8|None|
 |clientAddress|uint8[7]|None|
-|systemIndex|uint16|Big Endian|
-|clientSystemAddresses|addresses[10]|None|
+|clientIndex|uint16|Big Endian|
+|clientSystemAddresses|address[10]|None|
 |clientSendTime|uint64|Big Endian|
 |serverSendTime|uint64|Big Endian|
 
