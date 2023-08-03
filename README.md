@@ -203,6 +203,8 @@ Latest docs about raknet protocol
 |wasGeneratedLocaly|bool|None|
 
 > Note that the connection lost is sent when you dont want to send the disconnection notification
+>
+> if you dont know what to put at was generated localy just set it to true
 
 ### IncompatibleProtocolVersion
 |Field|Field Type|Field Type Endianness|
