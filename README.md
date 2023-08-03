@@ -38,7 +38,7 @@ Latest docs about raknet protocol
 |Nack|0xa0|
 |Ack|0xc0|
 
-### UnconnectedPing || UnconnectedPingOpenConnections
+### UnconnectedPingStruct
 |Field|Field Type|Field Type Endianness|
 |-----|---------|-------------------|
 |onlyReplyOnOpenConnections|bool|None|
