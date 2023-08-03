@@ -285,5 +285,5 @@ latest doc about raknet protocol
 |Field|Field Type|Field Type Endianness|
 |-----|----------|---------------------|
 |isSingleSequenceNumber|bool|None|
-|startIndex|uint24|Little Endian|
-|endIndex|uint24|Little Endian|
+|startSequenceNumber|uint24|Little Endian|
+|endSequenceNumber|uint24|Little Endian|
