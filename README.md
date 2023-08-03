@@ -279,11 +279,11 @@ latest doc about raknet protocol
 |Field|Field Type|Field Type Endianness|
 |-----|----------|---------------------|
 |isSingleSequenceNumber|bool|None|
-|receivedSquenceNumber|uint24|Little Endian|
+|startSequenceNumber|uint24|Little Endian|
+|endSequenceNumber|uint24|Little Endian|
 
 #### The "AcknowledgeRecord" Contents without range
 |Field|Field Type|Field Type Endianness|
 |-----|----------|---------------------|
 |isSingleSequenceNumber|bool|None|
-|startSequenceNumber|uint24|Little Endian|
-|endSequenceNumber|uint24|Little Endian|
+|receivedSquenceNumber|uint24|Little Endian|
