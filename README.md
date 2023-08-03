@@ -1,5 +1,5 @@
 # RakNetProtocolDoc
-latest doc about raknet protocol
+Latest docs about raknet protocol
 
 # DataTypes
 |Type|Size|Note|
@@ -255,7 +255,7 @@ latest doc about raknet protocol
 |ReliableWithAckReceipt|6|Yes|No|No|
 |ReliableOrderedWithAckReceipt|6|Yes|Yes|No|
 
-### Nack || Ack
+### Nack or Ack
 |Field|Field Type|Field Type Endianness|
 |-----|---------|-------------------|
 |id|uint8|None|
