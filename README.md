@@ -113,7 +113,7 @@ Latest docs about raknet protocol
 |serverHasSecurity|bool|None|
 |hasCookieON|bool|None|
 |cookie|uint32|Big Endian|
-|serverPublicKey|uint8[]|None|
+|serverPublicKey|uint8[294]|None|
 |mtuSize|uint16|Big Endian|
 
 ### OpenConnectionRequestTwo
