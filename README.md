@@ -152,7 +152,7 @@ Latest docs about raknet protocol
 |doSecurity|bool|None|
 |clientProof|uint8[32]|None|
 |doIdentity|bool|None|
-|identityProof|uint8[]|None|
+|identityProof|uint8[294]|None|
 
 > immediately send the RemoteSystemRequiresPublicKey packet with the typeID of "ClientIdentityIsInvalid" if the identity is invalid and doIdentity is set to be true if its false the typeID should be "ClientIdentityIsMissing"
 
