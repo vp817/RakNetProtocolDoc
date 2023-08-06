@@ -225,7 +225,7 @@ Latest docs about raknet protocol
 #### The "Frame" Contents
 |Field|Field Type|Field Type Endianness|Note|
 |-----|----------|---------------------|----|
-|flags|uint8|None|(flags & 0b11100000) >> 5 is for reliabiltiy type and (flags & 0b00010000) > 0 (or == the 1 bit) for is fragmented|
+|flags|uint8|None|(flags & 0b11100000) >> or << 5 is for reliabiltiy type and (flags & 0b00010000) == 0b00010000 for is fragmented|
 |size|uint16|Big Endian|its in bits so 3 bits for reading and writing. read=extract, write=add|
 |reliableFrameIndex|uint24|Little Endian|Only if reliable|
 |sequencedFrameIndex|uint24|Little Endian|Only if sequenced|
