@@ -222,10 +222,10 @@ Latest docs about raknet protocol
 |frames|Frame[]|None|
 
 #### The "Frame" Contents
-|Field|Field Type|Field Type Endianness|Explanation|
+|Field|Field Type|Field Type Endianness|Note|
 |-----|----------|---------------------|----|
-|flags|uint8|None|we use the bitwise "and" operation with the mask 0xe0 to isolate the top 3 bits and then then extract 5 bits out of the flags and you will get the reliablitiy. to know if its fragmented you will use the bitwise "and" operation again to with the mask 0x10 to check if the 4th bit is set to 1 if the result is equal to 0x10 it is fragmented|
-|size|uint16|Big Endian|this is the size in bits to get it as bytes extract 3 bits out of it|
+|flags|uint8|None|0b11100000 is for reliabiltiy and 0b00010000 for is fragmented|
+|size|uint16|Big Endian|3 bits for reading and writing. read=extract, write=add|
 |reliableFrameIndex|uint24|Little Endian|Only if reliable|
 |sequencedFrameIndex|uint24|Little Endian|Only if sequenced|
 |order|FrameOrder|None|Only if ordered|
@@ -288,4 +288,4 @@ Latest docs about raknet protocol
 |Field|Field Type|Field Type Endianness|
 |-----|----------|---------------------|
 |isSingleSequenceNumber|bool|None|
-|receivedSquenceNumber|uint24|Little Endian|
+|singleSquenceNumber|uint24|Little Endian|
