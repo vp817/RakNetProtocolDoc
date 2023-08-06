@@ -7,6 +7,7 @@ Latest docs about raknet protocol
 |uint8|1||
 |uint16|2||
 |uint16-string|uint16 size + the string size|That is an utf-8 encoded string the uint16 as the length of it|
+|uint24|3|min=0, max=(1 << 24) - 1|
 |uint32|4||
 |uint64|4-8|4 for 32bit systems 8 for 64 bit systems|
 |magic|16|The magic is an uint8 array and its contents is: [0x00, 0xFF, 0xFF, 0x00, 0xFE, 0xFE, 0xFE, 0xFE, 0xFD, 0xFD, 0xFD, 0xFD, 0x12, 0x34, 0x56, 0x78]|
