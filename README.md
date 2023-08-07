@@ -1,5 +1,5 @@
 # RakNetProtocolDoc
-Latest docs about raknet protocol
+Latest doc about raknet protocol
 
 # DataTypes
 |Type|Size|Note|
