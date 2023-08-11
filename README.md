@@ -260,11 +260,14 @@ Latest doc about raknet protocol
 
 ### Nack or Ack
 |Field|Field Type|Field Type Endianness|
-|-----|---------|-------------------|
+|-----|----------|---------------------|
 |id|uint8|None|
 |ranges|Range|None|
-|rangesSize|uint16|Big Endian|
-|rangesBuffer|Buffer or Bytes|None|
 
 ### The "Range" Contents
-todo
+|Field|Field Type|Field Type Endianness|Note|
+|-----|----------|---------------------|----|
+|size|uint24|Little Endian|the ranges count|
+|isSingle|bool|None|if the max index is the min index then its true else false|
+|min|uint24|Little Endian|written in a seperate buffer|
+|max|uint24|Little Endian|if not single|
