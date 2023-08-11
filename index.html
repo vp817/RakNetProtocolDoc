@@ -1,0 +1,1047 @@
+<title>RakNetProtocolDoc | Latest doc about RakNet</title> <article class="markdown-body entry-content container-lg" itemprop="text"><h1 tabindex="-1" dir="auto"><a id="user-content-raknetprotocoldoc" class="anchor" aria-hidden="true" href="#raknetprotocoldoc"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>RakNetProtocolDoc</h1>
+<p dir="auto">Latest doc about raknet protocol</p>
+<h1 tabindex="-1" dir="auto"><a id="user-content-datatypes" class="anchor" aria-hidden="true" href="#datatypes"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>DataTypes</h1>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Size</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>uint8</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>uint16</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>uint16-string</td>
+<td>uint16 size + the string size</td>
+<td>That is an utf-8 encoded string the uint16 as the length of it</td>
+</tr>
+<tr>
+<td>uint24</td>
+<td>3</td>
+<td>min=0, max=(1 &lt;&lt; 24) - 1</td>
+</tr>
+<tr>
+<td>uint32</td>
+<td>4</td>
+<td></td>
+</tr>
+<tr>
+<td>uint64</td>
+<td>4-8</td>
+<td>4 for 32bit systems 8 for 64 bit systems</td>
+</tr>
+<tr>
+<td>magic</td>
+<td>16</td>
+<td>The magic is an uint8 array and its contents is: [0x00, 0xFF, 0xFF, 0x00, 0xFE, 0xFE, 0xFE, 0xFE, 0xFD, 0xFD, 0xFD, 0xFD, 0x12, 0x34, 0x56, 0x78]</td>
+</tr>
+<tr>
+<td>pad-with-zero</td>
+<td>your choice</td>
+<td>You will fill null byte with the size of your choice as the size of the fill and on reading just get the remaining bytes that are zero size but if the pad-with-zero is what you wrote at the last place just get the remaining bytes length</td>
+</tr>
+<tr>
+<td>bool</td>
+<td>0-1</td>
+<td>read uint8 and if you get 0x00 then return false. 0x01 = true</td>
+</tr>
+<tr>
+<td>address</td>
+<td>7</td>
+<td>1 uint8 for address version 4 uint8's is for the address ip 1 uint16 for the address port</td>
+</tr>
+</tbody>
+</table>
+<h1 tabindex="-1" dir="auto"><a id="user-content-packets" class="anchor" aria-hidden="true" href="#packets"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>Packets</h1>
+<h3 tabindex="-1" dir="auto"><a id="user-content-identifiers" class="anchor" aria-hidden="true" href="#identifiers"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>Identifiers</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>ID</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UnconnectedPing</td>
+<td>0x01</td>
+</tr>
+<tr>
+<td>UnconnectedPingOpenConnections</td>
+<td>0x02</td>
+</tr>
+<tr>
+<td>UnconnectedPong</td>
+<td>0x1c</td>
+</tr>
+<tr>
+<td>ConnectedPing</td>
+<td>0x00</td>
+</tr>
+<tr>
+<td>ConnectedPong</td>
+<td>0x03</td>
+</tr>
+<tr>
+<td>OpenConnectionRequestOne</td>
+<td>0x05</td>
+</tr>
+<tr>
+<td>OpenConnectionReplyOne</td>
+<td>0x06</td>
+</tr>
+<tr>
+<td>OpenConnectionRequestTwo</td>
+<td>0x07</td>
+</tr>
+<tr>
+<td>OpenConnectionReplyTwo</td>
+<td>0x08</td>
+</tr>
+<tr>
+<td>ConnectionRequest</td>
+<td>0x09</td>
+</tr>
+<tr>
+<td>RemoteSystemRequiresPublicKey</td>
+<td>0x0a</td>
+</tr>
+<tr>
+<td>ConnectionRequestAccepted</td>
+<td>0x10</td>
+</tr>
+<tr>
+<td>NewIncomingConnection</td>
+<td>0x13</td>
+</tr>
+<tr>
+<td>DisconnectionNotification</td>
+<td>0x15</td>
+</tr>
+<tr>
+<td>ConnectionLost</td>
+<td>0x16</td>
+</tr>
+<tr>
+<td>IncompatibleProtocolVersion</td>
+<td>0x19</td>
+</tr>
+<tr>
+<td>FrameSet</td>
+<td>0x80..0x8d</td>
+</tr>
+<tr>
+<td>Nack</td>
+<td>0xa0</td>
+</tr>
+<tr>
+<td>Ack</td>
+<td>0xc0</td>
+</tr>
+</tbody>
+</table>
+<h3 tabindex="-1" dir="auto"><a id="user-content-unconnectedpingstruct" class="anchor" aria-hidden="true" href="#unconnectedpingstruct"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>UnconnectedPingStruct</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Field Type</th>
+<th>Field Type Endianness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>onlyReplyOnOpenConnections</td>
+<td>bool</td>
+<td>None</td>
+</tr>
+<tr>
+<td>id</td>
+<td>uint8</td>
+<td>None</td>
+</tr>
+<tr>
+<td>clientSendTime</td>
+<td>uint64</td>
+<td>Big Endian</td>
+</tr>
+<tr>
+<td>magic</td>
+<td>uint8[16]</td>
+<td>None</td>
+</tr>
+<tr>
+<td>clientGuid</td>
+<td>uint64</td>
+<td>Big Endian</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p dir="auto">Note about the "onlyReplyOnOpenConnections":</p>
+<p dir="auto">it isnt read / written inside the binary.</p>
+<p dir="auto">if its true then the id should be the unconnected ping open connections id and if false it should be the unconnected ping id</p>
+</blockquote>
+<h3 tabindex="-1" dir="auto"><a id="user-content-unconnectedpong" class="anchor" aria-hidden="true" href="#unconnectedpong"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>UnconnectedPong</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Field Type</th>
+<th>Field Type Endianness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>uint8</td>
+<td>None</td>
+</tr>
+<tr>
+<td>serverSendTime</td>
+<td>uint64</td>
+<td>Big Endian</td>
+</tr>
+<tr>
+<td>serverGuid</td>
+<td>uint64</td>
+<td>Big Endian</td>
+</tr>
+<tr>
+<td>magic</td>
+<td>uint8[16]</td>
+<td>None</td>
+</tr>
+<tr>
+<td>responseData</td>
+<td>uint16-string</td>
+<td>Big Endian</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p dir="auto">Note that the responseData is what you will get as the motd take mcbe|mcee data as example:</p>
+<p dir="auto">(MCPE|MCEE);(Motd);(Current MCBE|MCEE Protocol Version);(Current MCBE|MCEE Version);(Online Players Count);(Max Players Count);(UniqueID (20 digits recommended));(Default World Name);(Default GameMode String);(Default GameMode Int);(Ipv4);(Ipv6);</p>
+<p dir="auto">the "Default Gamemode Int" to "Ipv6" is not necessary</p>
+</blockquote>
+<h3 tabindex="-1" dir="auto"><a id="user-content-connectedping" class="anchor" aria-hidden="true" href="#connectedping"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>ConnectedPing</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Field Type</th>
+<th>Field Type Endianness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>uint8</td>
+<td>None</td>
+</tr>
+<tr>
+<td>clientSendTime</td>
+<td>uint64</td>
+<td>Big Endian</td>
+</tr>
+</tbody>
+</table>
+<h3 tabindex="-1" dir="auto"><a id="user-content-connectedpong" class="anchor" aria-hidden="true" href="#connectedpong"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>ConnectedPong</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Field Type</th>
+<th>Field Type Endianness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>uint8</td>
+<td>None</td>
+</tr>
+<tr>
+<td>clientSendTime</td>
+<td>uint64</td>
+<td>Big Endian</td>
+</tr>
+<tr>
+<td>serverSendTime</td>
+<td>uint64</td>
+<td>Big Endian</td>
+</tr>
+</tbody>
+</table>
+<h3 tabindex="-1" dir="auto"><a id="user-content-openconnectionrequestone" class="anchor" aria-hidden="true" href="#openconnectionrequestone"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>OpenConnectionRequestOne</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Field Type</th>
+<th>Field Type Endianness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>uint8</td>
+<td>None</td>
+</tr>
+<tr>
+<td>magic</td>
+<td>uint8[16]</td>
+<td>None</td>
+</tr>
+<tr>
+<td>protocolVersion</td>
+<td>uint8</td>
+<td>None</td>
+</tr>
+<tr>
+<td>mtuSize</td>
+<td>pad-with-zero</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p dir="auto">Note about the mtuSize and the pad-with-zero of open connection request one is:</p>
+<p dir="auto">you will need to put when padding with zero the mtuSize plus the current available bytes size plus 28 (Udp Header Size)</p>
+<p dir="auto">if you want to check if the size of the current available bytes is valid check if the available bytes size is 18 before you pad-with-zero</p>
+</blockquote>
+<h3 tabindex="-1" dir="auto"><a id="user-content-openconnectionreplyone" class="anchor" aria-hidden="true" href="#openconnectionreplyone"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>OpenConnectionReplyOne</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Field Type</th>
+<th>Field Type Endianness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>uint8</td>
+<td>None</td>
+</tr>
+<tr>
+<td>magic</td>
+<td>uint8[16]</td>
+<td>None</td>
+</tr>
+<tr>
+<td>serverGuid</td>
+<td>uint64</td>
+<td>Big Endian</td>
+</tr>
+<tr>
+<td>serverHasSecurity</td>
+<td>bool</td>
+<td>None</td>
+</tr>
+<tr>
+<td>mtuSize</td>
+<td>uint16</td>
+<td>Big Endian</td>
+</tr>
+</tbody>
+</table>
+<h3 tabindex="-1" dir="auto"><a id="user-content-openconnectionreplyone-with-security" class="anchor" aria-hidden="true" href="#openconnectionreplyone-with-security"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>OpenConnectionReplyOne With Security</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Field Type</th>
+<th>Field Type Endianness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>uint8</td>
+<td>None</td>
+</tr>
+<tr>
+<td>magic</td>
+<td>uint8[16]</td>
+<td>None</td>
+</tr>
+<tr>
+<td>serverGuid</td>
+<td>uint64</td>
+<td>Big Endian</td>
+</tr>
+<tr>
+<td>serverHasSecurity</td>
+<td>bool</td>
+<td>None</td>
+</tr>
+<tr>
+<td>hasCookieON</td>
+<td>bool</td>
+<td>None</td>
+</tr>
+<tr>
+<td>cookie</td>
+<td>uint32</td>
+<td>Big Endian</td>
+</tr>
+<tr>
+<td>serverPublicKey</td>
+<td>uint8[294]</td>
+<td>None</td>
+</tr>
+<tr>
+<td>mtuSize</td>
+<td>uint16</td>
+<td>Big Endian</td>
+</tr>
+</tbody>
+</table>
+<h3 tabindex="-1" dir="auto"><a id="user-content-openconnectionrequesttwo" class="anchor" aria-hidden="true" href="#openconnectionrequesttwo"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>OpenConnectionRequestTwo</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Field Type</th>
+<th>Field Type Endianness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>uint8</td>
+<td>None</td>
+</tr>
+<tr>
+<td>magic</td>
+<td>uint8[16]</td>
+<td>None</td>
+</tr>
+<tr>
+<td>serverAddress</td>
+<td>uint8[7]</td>
+<td>None</td>
+</tr>
+<tr>
+<td>mtuSize</td>
+<td>uint16</td>
+<td>Big Endian</td>
+</tr>
+<tr>
+<td>clientGuid</td>
+<td>uint64</td>
+<td>Big Endian</td>
+</tr>
+</tbody>
+</table>
+<h3 tabindex="-1" dir="auto"><a id="user-content-openconnectionreplytwo" class="anchor" aria-hidden="true" href="#openconnectionreplytwo"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>OpenConnectionReplyTwo</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Field Type</th>
+<th>Field Type Endianness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>uint8</td>
+<td>None</td>
+</tr>
+<tr>
+<td>magic</td>
+<td>uint8[16]</td>
+<td>None</td>
+</tr>
+<tr>
+<td>serverGuid</td>
+<td>uint64</td>
+<td>Big Endian</td>
+</tr>
+<tr>
+<td>clientAddress</td>
+<td>uint8[7]</td>
+<td>None</td>
+</tr>
+<tr>
+<td>mtuSize</td>
+<td>uint16</td>
+<td>Big Endian</td>
+</tr>
+<tr>
+<td>requiresEncryption</td>
+<td>bool</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<h3 tabindex="-1" dir="auto"><a id="user-content-connectionrequest" class="anchor" aria-hidden="true" href="#connectionrequest"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>ConnectionRequest</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Field Type</th>
+<th>Field Type Endianness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>uint8</td>
+<td>None</td>
+</tr>
+<tr>
+<td>clientGuid</td>
+<td>uint64</td>
+<td>Big Endian</td>
+</tr>
+<tr>
+<td>serverSendTime</td>
+<td>uint64</td>
+<td>Big Endian</td>
+</tr>
+<tr>
+<td>doSecurity</td>
+<td>bool</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<h3 tabindex="-1" dir="auto"><a id="user-content-connectionrequest-with-security" class="anchor" aria-hidden="true" href="#connectionrequest-with-security"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>ConnectionRequest With Security</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Field Type</th>
+<th>Field Type Endianness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>uint8</td>
+<td>None</td>
+</tr>
+<tr>
+<td>clientGuid</td>
+<td>uint64</td>
+<td>Big Endian</td>
+</tr>
+<tr>
+<td>serverSendTime</td>
+<td>uint64</td>
+<td>Big Endian</td>
+</tr>
+<tr>
+<td>doSecurity</td>
+<td>bool</td>
+<td>None</td>
+</tr>
+<tr>
+<td>clientProof</td>
+<td>uint8[32]</td>
+<td>None</td>
+</tr>
+<tr>
+<td>doIdentity</td>
+<td>bool</td>
+<td>None</td>
+</tr>
+<tr>
+<td>identityProof</td>
+<td>uint8[294]</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p dir="auto">immediately send the RemoteSystemRequiresPublicKey packet with the typeID of "ClientIdentityIsInvalid" if the identity is invalid and doIdentity is set to be true if its false the typeID should be "ClientIdentityIsMissing"</p>
+</blockquote>
+<h3 tabindex="-1" dir="auto"><a id="user-content-remotesystemrequirespublickey" class="anchor" aria-hidden="true" href="#remotesystemrequirespublickey"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>RemoteSystemRequiresPublicKey</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Field Type</th>
+<th>Field Type Endianness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>uint8</td>
+<td>None</td>
+</tr>
+<tr>
+<td>typeID</td>
+<td>uint8</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<h4 tabindex="-1" dir="auto"><a id="user-content-the-remotesystemrequirespublickey-typeids" class="anchor" aria-hidden="true" href="#the-remotesystemrequirespublickey-typeids"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>The RemoteSystemRequiresPublicKey TypeID's</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>ID</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ServerPublicKeyIsMissing</td>
+<td>0</td>
+</tr>
+<tr>
+<td>ClientIdentityIsMissing</td>
+<td>1</td>
+</tr>
+<tr>
+<td>ClientIdentityIsInvalid</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<h3 tabindex="-1" dir="auto"><a id="user-content-connectionrequestaccepted" class="anchor" aria-hidden="true" href="#connectionrequestaccepted"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>ConnectionRequestAccepted</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Field Type</th>
+<th>Field Type Endianness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>uint8</td>
+<td>None</td>
+</tr>
+<tr>
+<td>clientAddress</td>
+<td>uint8[7]</td>
+<td>None</td>
+</tr>
+<tr>
+<td>clientIndex</td>
+<td>uint16</td>
+<td>Big Endian</td>
+</tr>
+<tr>
+<td>clientSystemAddresses</td>
+<td>address[10]</td>
+<td>None</td>
+</tr>
+<tr>
+<td>clientSendTime</td>
+<td>uint64</td>
+<td>Big Endian</td>
+</tr>
+<tr>
+<td>serverSendTime</td>
+<td>uint64</td>
+<td>Big Endian</td>
+</tr>
+</tbody>
+</table>
+<h3 tabindex="-1" dir="auto"><a id="user-content-newincomingconnection" class="anchor" aria-hidden="true" href="#newincomingconnection"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>NewIncomingConnection</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Field Type</th>
+<th>Field Type Endianness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>uint8</td>
+<td>None</td>
+</tr>
+<tr>
+<td>serverAddress</td>
+<td>uint8[7]</td>
+<td>None</td>
+</tr>
+<tr>
+<td>clientIndex</td>
+<td>uint16</td>
+<td>Big Endian</td>
+</tr>
+<tr>
+<td>clientSystemAddresses</td>
+<td>address[10]</td>
+<td>None</td>
+</tr>
+<tr>
+<td>clientSendTime</td>
+<td>uint64</td>
+<td>Big Endian</td>
+</tr>
+<tr>
+<td>serverSendTime</td>
+<td>uint64</td>
+<td>Big Endian</td>
+</tr>
+</tbody>
+</table>
+<h3 tabindex="-1" dir="auto"><a id="user-content-disconnectionnotification" class="anchor" aria-hidden="true" href="#disconnectionnotification"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>DisconnectionNotification</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Field Type</th>
+<th>Field Type Endianness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>uint8</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<h3 tabindex="-1" dir="auto"><a id="user-content-connectionlost" class="anchor" aria-hidden="true" href="#connectionlost"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>ConnectionLost</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Field Type</th>
+<th>Field Type Endianness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>uint8</td>
+<td>None</td>
+</tr>
+<tr>
+<td>clientGuid</td>
+<td>uint64</td>
+<td>Big Endian</td>
+</tr>
+<tr>
+<td>clientAddress</td>
+<td>uint8[7]</td>
+<td>None</td>
+</tr>
+<tr>
+<td>wasGeneratedLocaly</td>
+<td>bool</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p dir="auto">Note that the connection lost is sent when you dont want to send the disconnection notification</p>
+<p dir="auto">if you dont know what to put at was generated localy just set it to true</p>
+</blockquote>
+<h3 tabindex="-1" dir="auto"><a id="user-content-incompatibleprotocolversion" class="anchor" aria-hidden="true" href="#incompatibleprotocolversion"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>IncompatibleProtocolVersion</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Field Type</th>
+<th>Field Type Endianness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>uint8</td>
+<td>None</td>
+</tr>
+<tr>
+<td>protocolVersion</td>
+<td>uint8</td>
+<td>None</td>
+</tr>
+<tr>
+<td>magic</td>
+<td>uint8[16]</td>
+<td>None</td>
+</tr>
+<tr>
+<td>serverGuid</td>
+<td>uint64</td>
+<td>Big Endian</td>
+</tr>
+</tbody>
+</table>
+<h3 tabindex="-1" dir="auto"><a id="user-content-frameset" class="anchor" aria-hidden="true" href="#frameset"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>FrameSet</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Field Type</th>
+<th>Field Type Endianness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>uint8</td>
+<td>None</td>
+</tr>
+<tr>
+<td>sequenceNumber</td>
+<td>uint24</td>
+<td>Little Endian</td>
+</tr>
+<tr>
+<td>frames</td>
+<td>Frame[]</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<h4 tabindex="-1" dir="auto"><a id="user-content-the-frame-contents" class="anchor" aria-hidden="true" href="#the-frame-contents"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>The "Frame" Contents</h4>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Field Type</th>
+<th>Field Type Endianness</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>flags</td>
+<td>uint8</td>
+<td>None</td>
+<td>3 bits for reliablitiy type and 1 bit for is fragmented</td>
+</tr>
+<tr>
+<td>size</td>
+<td>uint16</td>
+<td>Big Endian</td>
+<td>its in bits so 3 bits for reading and writing. read=extract, write=add</td>
+</tr>
+<tr>
+<td>reliableFrameIndex</td>
+<td>uint24</td>
+<td>Little Endian</td>
+<td>Only if reliable</td>
+</tr>
+<tr>
+<td>sequencedFrameIndex</td>
+<td>uint24</td>
+<td>Little Endian</td>
+<td>Only if sequenced</td>
+</tr>
+<tr>
+<td>order</td>
+<td>FrameOrder</td>
+<td>None</td>
+<td>Only if ordered</td>
+</tr>
+<tr>
+<td>fragment</td>
+<td>FrameFragment</td>
+<td>None</td>
+<td>Only if fragmented</td>
+</tr>
+<tr>
+<td>buffer</td>
+<td>Buffer</td>
+<td>None</td>
+<td>The buffer can be whatever language you are working on type of buffer you would basically read out of it the "size" you got up there</td>
+</tr>
+</tbody>
+</table>
+<h4 tabindex="-1" dir="auto"><a id="user-content-the-frameorder-contents" class="anchor" aria-hidden="true" href="#the-frameorder-contents"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>The "FrameOrder" Contents</h4>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Field Type</th>
+<th>Field Type Endianness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>orderedFrameIndex</td>
+<td>uint24</td>
+<td>Little Endian</td>
+</tr>
+<tr>
+<td>orderChannel</td>
+<td>uint8</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<h4 tabindex="-1" dir="auto"><a id="user-content-the-framefragment-contents" class="anchor" aria-hidden="true" href="#the-framefragment-contents"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>The "FrameFragment" Contents</h4>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Field Type</th>
+<th>Field Type Endianness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>compoundSize</td>
+<td>uint32</td>
+<td>Big Endian</td>
+</tr>
+<tr>
+<td>compoundID</td>
+<td>uint16</td>
+<td>Big Endian</td>
+</tr>
+<tr>
+<td>compoundIndex</td>
+<td>uint32</td>
+<td>Big Endian</td>
+</tr>
+</tbody>
+</table>
+<h4 tabindex="-1" dir="auto"><a id="user-content-the-reliablitiy-typeids" class="anchor" aria-hidden="true" href="#the-reliablitiy-typeids"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>The Reliablitiy TypeID's</h4>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>ID</th>
+<th>Is Reliable</th>
+<th>Is Ordered</th>
+<th>Is Sequenced</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unreliable</td>
+<td>0</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>UnreliableSequenced</td>
+<td>1</td>
+<td>No</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Reliable</td>
+<td>2</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>ReliableOrdered</td>
+<td>3</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>ReliableSequenced</td>
+<td>4</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>UnreliableWithAckReceipt</td>
+<td>5</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>ReliableWithAckReceipt</td>
+<td>6</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>ReliableOrderedWithAckReceipt</td>
+<td>7</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<h3 tabindex="-1" dir="auto"><a id="user-content-nack-or-ack" class="anchor" aria-hidden="true" href="#nack-or-ack"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>Nack or Ack</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Field Type</th>
+<th>Field Type Endianness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>uint8</td>
+<td>None</td>
+</tr>
+<tr>
+<td>ranges</td>
+<td>Range</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<h3 tabindex="-1" dir="auto"><a id="user-content-the-range-contents" class="anchor" aria-hidden="true" href="#the-range-contents"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a>The "Range" Contents</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Field Type</th>
+<th>Field Type Endianness</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>size</td>
+<td>uint24</td>
+<td>Little Endian</td>
+<td>the ranges count</td>
+</tr>
+<tr>
+<td>isSingle</td>
+<td>bool</td>
+<td>None</td>
+<td>if the max index is the min index then its true else false</td>
+</tr>
+<tr>
+<td>min</td>
+<td>uint24</td>
+<td>Little Endian</td>
+<td>written in a seperate buffer</td>
+</tr>
+<tr>
+<td>max</td>
+<td>uint24</td>
+<td>Little Endian</td>
+<td>if not single</td>
+</tr>
+</tbody>
+</table>
+</article>
