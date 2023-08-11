@@ -262,31 +262,9 @@ Latest doc about raknet protocol
 |Field|Field Type|Field Type Endianness|
 |-----|---------|-------------------|
 |id|uint8|None|
+|ranges|Range|None|
+|rangesSize|uint16|Big Endian|
+|rangesBuffer|Buffer or Bytes|None|
 
-> The Nack and Ack are the same the only difference is the id so we extends them with another class that have the reading and writing of them we call that class Acknowledge since Ack means Acknowledgement or Acknowledged and Nack means NegativeAckowledgement or NotAcknowledged
->
-> the "ranges" is an array of sequence numbers is is used on "Acknowledge" and it must be sorted. when reading from buffer you will get them sorted because it is written sorted to the bufer you are using
-
-#### The "Acknowledge" Contents
-|Field|Field Type|Field Type Endianness|
-|-----|----------|---------------------|
-|recordCount|uint16|Big Endian|
-|records|AcknowledgeRecord[]|None|
-
-#### The "AcknowledgeRecord" Contents
-|Field|Field Type|Field Type Endianness|Note|
-|-----|----------|---------------------|----|
-|isSingleSequenceNumber|bool|None|True for with range false for without range|
-
-#### The "AcknowledgeRecord" Contents with range
-|Field|Field Type|Field Type Endianness|
-|-----|----------|---------------------|
-|isSingleSequenceNumber|bool|None|
-|startSequenceNumber|uint24|Little Endian|
-|endSequenceNumber|uint24|Little Endian|
-
-#### The "AcknowledgeRecord" Contents without range
-|Field|Field Type|Field Type Endianness|
-|-----|----------|---------------------|
-|isSingleSequenceNumber|bool|None|
-|singleSquenceNumber|uint24|Little Endian|
+### The "Range" Contents
+todo
