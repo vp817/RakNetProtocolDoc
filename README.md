@@ -29,7 +29,7 @@ Feel free to join my discord server if you have any more questions: <a href="htt
 | magic | 16 bytes | An array of unsigned 8-bit integers with a specific sequence and it is: [0x00, 0xFF, 0xFF, 0x00, 0xFE, 0xFE, 0xFE, 0xFE, 0xFD, 0xFD, 0xFD, 0xFD, 0x12, 0x34, 0x56, 0x78] |
 | pad-with-zero | variable | Null bytes used for padding with a size of your choice |
 | bool | 1 byte | Write or read as a single unsigned 8-bit integer, with a value of 0 or 1 (Zero is used to represent false, and One is used to represent true) |
-| address | 7-19 bytes | An IP address and port combination (1 byte for address version, 4 bytes for IPv4 addresses, 16 bytes for IPv6 addresses, and 2 bytes for the port number) |
+| address | 7-29 bytes | IPv4: 1 byte (address version), 4 bytes (IP address), 2 bytes (port), IPv6: 1 byte (address version), 2 bytes (address family), 2 bytes (port), 4 bytes (flow info), 16 bytes (IP address), 4 bytes (scope ID) |
 | bit | 1 bit | Write or read the bit inside the buffer after you completed it |
 | float | 4 bytes | IEEE 754 single-precision floating-point number |
 
@@ -147,7 +147,7 @@ This packet is used to complete the handshake process between a client and a ser
 | ----- | ---- | ----------| ----- |
 | id | uint8 | N/A | Unique identifier for the request |
 | magic | uint8[16] | N/A | Magic sequence to identify the packet |
-| serverAddress | uint8[7-19] | N/A | Server IP address and port combo |
+| serverAddress | uint8[7-29] | N/A | Server IP address and port combo |
 | mtuSize | uint16 | Big Endian | Maximum transmission unit (MTU) size of the client |
 | clientGuid | uint64 | Big Endian | Unique identifier for the client |
 
@@ -160,7 +160,7 @@ This packet is the response to an open connection request two packet.
 | id | uint8 | N/A | Unique identifier associated with the request |
 | magic | uint8[16] | N/A | Magic sequence to identify the packet |
 | serverGuid | uint64 | Big Endian | Unique identifier for the server |
-| clientAddress | uint8[7-19] | N/A | Client IP address and port combo |
+| clientAddress | uint8[7-29] | N/A | Client IP address and port combo |
 | mtuSize | uint16 | Big Endian | Maximum transmission unit (MTU) size of the server |
 | requiresEncryption | bool | N/A | Whether the connection requires encryption or not |
 
@@ -204,7 +204,7 @@ This packet is the response to a connection request with security enabled.
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
 | id | uint8 | N/A | Unique identifier associated with the request |
-| clientAddress | uint8[7-19] | N/A | Client IP address and port combo |
+| clientAddress | uint8[7-29] | N/A | Client IP address and port combo |
 | clientIndex | uint16 | Big Endian | Unique identifier assigned to the client |
 | serverMachineAddresses | address[10] | N/A | Server machine addresses |
 | clientSendTime | uint64 | Big Endian | Timestamp for the client |
@@ -217,7 +217,7 @@ This packet is sent to all other clients when a new client connects to the serve
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
 | id | uint8 | N/A | Unique identifier associated with the connection |
-| serverAddress | uint8[7-19] | N/A | Server IP address and port combo |
+| serverAddress | uint8[7-29] | N/A | Server IP address and port combo |
 | clientIndex | uint16 | Big Endian | Unique identifier assigned to the client |
 | clientMachineAddresses | address[10] | N/A | Client machine addresses |
 | clientSendTime | uint64 | Big Endian | Timestamp for the client |
@@ -241,7 +241,7 @@ This packet is sent when a connection to a client is lost.
 | ----- | ---- | ----------| ----- |
 | id | uint8 | N/A | Unique identifier associated with the lost connection |
 | clientGuid | uint64 | Big Endian | Unique identifier for the client |
-| clientAddress | uint8[7-19] | N/A | Client IP address and port combo |
+| clientAddress | uint8[7-29] | N/A | Client IP address and port combo |
 | wasGeneratedLocaly | bool | N/A | Whether the packet was generated locally |
 
 > Note: If you're not sure what to set `wasGeneratedLocaly` to, just set it to `true`.
