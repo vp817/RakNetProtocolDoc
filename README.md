@@ -408,6 +408,15 @@ RakNet uses a reassembly mechanism to reconstruct segmented datagrams that may b
 ### AS
 "AS" represents the data arrival rate, which is the rate at which the data is generated and sent by the sender. The use of a float value allows for more precise representation of the arrival rate, which can vary based on the application requirements and the network conditions. By comparing the arrival rate with the link capacity, the sender can determine the amount of data that can be sent over the network link without causing congestion or degradation of performance.
 
+### Congestion Control
+Congestion control is a set of techniques used to prevent or reduce network congestion in computer networks. Congestion can occur when the network traffic exceeds its capacity, leading to poor performance, increased delays, and packet loss.
+
+To prevent congestion from happening, window-based flow control algorithms can be used, such as the TCP congestion control algorithm. These algorithms aim to balance the sending and receiving of data by adjusting their sending rates based on network conditions and the degree of congestion.
+
+Other techniques such as packet dropping and rate limiting can also be used to control congestion. Furthermore, network administrators can implement traffic shaping, quality of service (QoS) policies, and load balancing to manage network congestion and ensure smooth and efficient data transmission.
+
+By implementing these techniques, congestion control can help maintain the reliable delivery of data in a timely and efficient manner, Improving the raknet.
+
 ### CapsuleLayer Size
 To determine the size of the capsule layer, you can follow these steps:
 1. Increment the byte by 1 step to represent the reliability.
