@@ -390,8 +390,12 @@ Here you can find every reliablity definition which is used in other places at t
 ### Retransmission
 RakNet uses selective repeat retransmission to ensure reliable delivery of datagrams. When a datagram is sent, it is assigned a sequence number. If a datagram is not acknowledged within a certain timeout period, RakNet will retransmit the datagram using the same sequence number. When the receiver receives a duplicate datagram with the same sequence number, it can discard it, since it has already acknowledged that sequence number.
 
+For more information you can look at: <a href="https://datatracker.ietf.org/doc/html/rfc793">RFC 793</a>
+
 ### AckQueue / NackQueue
 The AckQueue and NackQueue are used to keep track of which datagrams have been acknowledged and which have not. The AckQueue stores a list of datagram sequence numbers that have been successfully acknowledged, while the NackQueue stores a list of datagram sequence numbers that have not been acknowledged and need to be retransmitted. When a datagram is received with a sequence number that has already been acknowledged, it can be discarded.
+
+For more information you can look at: <a href="https://datatracker.ietf.org/doc/html/rfc793">RFC 793</a>
 
 ### PacketPair
 PacketPair is a technique used by RakNet to improve the efficiency of datagram retransmissions. When a datagram is acknowledged, RakNet sends the next datagram in the sequence as well. This allows the receiver to begin processing the next datagram immediately, reducing latency and improving throughput.
@@ -405,8 +409,12 @@ RakNet uses a reassembly mechanism to reconstruct segmented datagrams that may b
 ### Flow Control
 Flow Control is a RakNet mechanism used to manage the rate of data transmission between sender and receiver. It ensures that the receiver can handle the incoming data at a pace it can process, preventing overwhelming or overflowing the receiver's buffer. Flow control helps maintain a balance between the sender's transmission speed and the receiver's processing capability, optimizing the overall efficiency and stability of the communication.
 
+For more information you can look at: <a href="https://datatracker.ietf.org/doc/html/rfc793">RFC 793</a>
+
 ### Congestion Control
 Congestion control is a RakNet technique used to prevent network congestion by balancing data transmission rates. Techniques like TCP congestion control, packet dropping, rate limiting, traffic shaping, QoS, and load balancing are used. These techniques ensure reliable data delivery and efficient transmission in RakNet.
+
+For more information you can look at: <a href="https://datatracker.ietf.org/doc/html/rfc5681">RFC 5681</a>
 
 ### B
 "B" represents the link capacity or the maximum amount of data that can be transmitted per second over the network link. The link capacity is determined by multiple factors, including the network infrastructure, the network configuration, and the available resources. By using a float value, the network capacity can be represented more accurately and precisely, enabling better utilization of the available resources.
