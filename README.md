@@ -406,6 +406,8 @@ ContinuousSend is a feature of RakNet that allows datagrams to be sent continuou
 ### Reassembly
 RakNet uses a reassembly mechanism to reconstruct segmented datagrams that may be received out of order. When a datagram is segmented, each segment is assigned a unique identifier. When the receiver receives a segment, it is buffered until all segments with the same identifier have been received. Once all segments have been received, they are reassembled into the original datagram.
 
+For more information you can look at: <a href="https://datatracker.ietf.org/doc/html/rfc793">RFC 793</a>
+
 ### Flow Control
 Flow Control is a RakNet mechanism used to manage the rate of data transmission between sender and receiver. It ensures that the receiver can handle the incoming data at a pace it can process, preventing overwhelming or overflowing the receiver's buffer. Flow control helps maintain a balance between the sender's transmission speed and the receiver's processing capability, optimizing the overall efficiency and stability of the communication.
 
