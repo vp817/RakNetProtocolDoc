@@ -380,6 +380,8 @@ Each datagram sent in RakNet is assigned a Reliability TypeID that specifies how
 
 * **ReliableArrangedWithAckReceipt:** This Reliability TypeID sends datagrams guaranteed to be delivered in the order they were sent but all datagrams before it that have not been acknowledged, and the receiver sends an acknowledgement receipt upon receipt of this datagram.
 
+For more information you can look at: <a href="https://datatracker.ietf.org/doc/html/rfc793">RFC 793</a>
+
 ### Reliability definitions
 Here you can find every reliablity definition which is used in other places at the documentation.
 
