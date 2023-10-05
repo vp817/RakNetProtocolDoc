@@ -420,6 +420,11 @@ Congestion control is a RakNet technique used to prevent network congestion by b
 
 For more information you can look at: <a href="https://datatracker.ietf.org/doc/html/rfc5681">RFC 5681</a>
 
+### Segment
+Segmentation in RakNet enhances data delivery by dividing large messages into smaller segments. These segments, with headers indicating position and size, ensure successful reassembly on the receiver's end. By comparing the buffer size to the Maximum Transmission Unit (MTU) size (usually 1400), if the buffer exceeds the MTU, it is split into segments for transmission. This mechanism in RakNet prevents data loss, manages large payloads, and guarantees reliable transmission in networked applications.
+
+For more information you can look at: <a href="https://datatracker.ietf.org/doc/html/rfc793">RFC 793</a>
+
 ### B
 "B" represents the link capacity or the maximum amount of data that can be transmitted per second over the network link. The link capacity is determined by multiple factors, including the network infrastructure, the network configuration, and the available resources. By using a float value, the network capacity can be represented more accurately and precisely, enabling better utilization of the available resources.
 
@@ -439,4 +444,4 @@ To determine the size of the capsule layer, you can follow these steps:
 The UserPacketEnum ID is `0x86`, which marks the beginning of where you can start using your custom packet IDs.
 
 ### Sending a Non-RakNet Packet
-To send a reliable packet that is not associated with RakNet, you need to determine if it needs to be segmented. This can be done by checking the size of the buffer to be sent and comparing it to the Maximum Transmission Unit (MTU) size, which is typically 1400. If it exceeds the MTU size, subtract 2 and add 3, plus 4 times 1 (for the data header byte length of the datagram) and minus 11 if you are using security. If it needs to be segmented, it will undergo a reassembly process before being sent. After reassembly is complete, add it to a queue to be sent as a datagram. If segmentation is not necessary, it can be added to the queue immediately. It's important to note that if a packet is segmented, it must not be unreliable. If it is found to be unreliable, then it should be turned into a reliable packet to ensure all parts of the packet are delivered successfully and in the correct order. 
+To send a packet that is not related to RakNet, you will need to determine if segmentation is required by comparing the buffer size to the MTU size minus 2 plus 3, plus 4 times 1 (for datagram's data header byte length), minus 11 if security is used. If segmentation is needed, perform reassembly before adding it to the datagram queue for transmission. If no segmentation is required, add it to the queue directly. Remember, segmented packets must not be unreliable; if found unreliable, convert them to reliable packets to ensure successful and ordered delivery of all packet parts.
