@@ -2,8 +2,6 @@
 
 This is the latest RakNet protocol documentation. It includes information on the data types used in the protocol and details about each packet and their associated fields.
 
-Feel free to join my discord server if you have any more questions: <a href="https://discord.gg/Ytwwgs5nFU">Join</a>
-
 ## Data Types
 
 ### Integer Data Types
@@ -26,7 +24,7 @@ Feel free to join my discord server if you have any more questions: <a href="htt
 
 | Type | Size | Note |
 | ---- | ---- | ---- |
-| magic | 16 bytes | An array of unsigned 8-bit integers with a specific sequence and it is: [0x00, 0xFF, 0xFF, 0x00, 0xFE, 0xFE, 0xFE, 0xFE, 0xFD, 0xFD, 0xFD, 0xFD, 0x12, 0x34, 0x56, 0x78] |
+| magic | 16 bytes | An array of unsigned 8-bit integers with a specific sequence and it is: `[0x00, 0xFF, 0xFF, 0x00, 0xFE, 0xFE, 0xFE, 0xFE, 0xFD, 0xFD, 0xFD, 0xFD, 0x12, 0x34, 0x56, 0x78]` |
 | pad-with-zero | variable | Null bytes used for padding with a size of your choice |
 | bool | 1 byte | Write or read as a single unsigned 8-bit integer, with a value of 0 or 1 (Zero is used to represent false, and One is used to represent true) |
 | address | 7-29 bytes | IPv4: 1 byte (address version), 4 bytes (IP address), 2 bytes (port), IPv6: 1 byte (address version), 2 bytes (address family), 2 bytes (port), 4 bytes (flow info), 16 bytes (IP address), 4 bytes (scope ID) |
@@ -380,24 +378,18 @@ Each datagram sent in RakNet is assigned a Reliability TypeID that specifies how
 
 * **ReliableArrangedWithAckReceipt:** This Reliability TypeID sends datagrams guaranteed to be delivered in the order they were sent but all datagrams before it that have not been acknowledged, and the receiver sends an acknowledgement receipt upon receipt of this datagram.
 
-For more information you can look at: <a href="https://datatracker.ietf.org/doc/html/rfc793">RFC 793</a>
-
 ### Reliability definitions
-Here you can find every reliablity definition which is used in other places at the documentation.
+Here you can find every reliability definition which is used in other places at the documentation.
 
 1. Reliable - This is when the reliability is of any type that is reliable
 2. Sequenced - This is when the reliability is both unreliable sequenced and reliable sequenced
-3. Sequenced and arranged - This is when the reliablity is `Sequenced` and reliable arranged and reliable arranged with ack recepit
+3. Sequenced and arranged - This is when the reliability is `Sequenced` and reliable arranged and reliable arranged with ack recepit
 
 ### Retransmission
 RakNet uses selective repeat retransmission to ensure reliable delivery of datagrams. When a datagram is sent, it is assigned a sequence number. If a datagram is not acknowledged within a certain timeout period, RakNet will retransmit the datagram using the same sequence number. When the receiver receives a duplicate datagram with the same sequence number, it can discard it, since it has already acknowledged that sequence number.
 
-For more information you can look at: <a href="https://datatracker.ietf.org/doc/html/rfc793">RFC 793</a>
-
 ### AckQueue / NackQueue
 The AckQueue and NackQueue are used to keep track of which datagrams have been acknowledged and which have not. The AckQueue stores a list of datagram sequence numbers that have been successfully acknowledged, while the NackQueue stores a list of datagram sequence numbers that have not been acknowledged and need to be retransmitted. When a datagram is received with a sequence number that has already been acknowledged, it can be discarded.
-
-For more information you can look at: <a href="https://datatracker.ietf.org/doc/html/rfc793">RFC 793</a>
 
 ### PacketPair
 PacketPair is a technique used by RakNet to improve the efficiency of datagram retransmissions. When a datagram is acknowledged, RakNet sends the next datagram in the sequence as well. This allows the receiver to begin processing the next datagram immediately, reducing latency and improving throughput.
@@ -408,22 +400,14 @@ ContinuousSend is a feature of RakNet that allows datagrams to be sent continuou
 ### Reassembly
 RakNet uses a reassembly mechanism to reconstruct segmented datagrams that may be received out of order. When a datagram is segmented, each segment is assigned a unique identifier. When the receiver receives a segment, it is buffered until all segments with the same identifier have been received. Once all segments have been received, they are reassembled into the original datagram.
 
-For more information you can look at: <a href="https://datatracker.ietf.org/doc/html/rfc793">RFC 793</a>
-
 ### Flow Control
 Flow Control is a RakNet mechanism used to manage the rate of data transmission between sender and receiver. It ensures that the receiver can handle the incoming data at a pace it can process, preventing overwhelming or overflowing the receiver's buffer. Flow control helps maintain a balance between the sender's transmission speed and the receiver's processing capability, optimizing the overall efficiency and stability of the communication.
-
-For more information you can look at: <a href="https://datatracker.ietf.org/doc/html/rfc793">RFC 793</a>
 
 ### Congestion Control
 Congestion control is a RakNet technique used to prevent network congestion by balancing data transmission rates. Techniques like TCP congestion control, packet dropping, rate limiting, traffic shaping, QoS, and load balancing are used. These techniques ensure reliable data delivery and efficient transmission in RakNet.
 
-For more information you can look at: <a href="https://datatracker.ietf.org/doc/html/rfc5681">RFC 5681</a>
-
 ### Segment
 Segmentation in RakNet enhances data delivery by dividing large messages into smaller segments. These segments, with headers indicating position and size, ensure successful reassembly on the receiver's end. By comparing the buffer size to the Maximum Transmission Unit (MTU) size (usually 1400), if the buffer exceeds the MTU, it is split into segments for transmission. This mechanism in RakNet prevents data loss, manages large payloads, and guarantees reliable transmission in networked applications.
-
-For more information you can look at: <a href="https://datatracker.ietf.org/doc/html/rfc793">RFC 793</a>
 
 ### B
 "B" represents the link capacity or the maximum amount of data that can be transmitted per second over the network link. The link capacity is determined by multiple factors, including the network infrastructure, the network configuration, and the available resources. By using a float value, the network capacity can be represented more accurately and precisely, enabling better utilization of the available resources.
@@ -445,3 +429,23 @@ The UserPacketEnum ID is `0x86`, which marks the beginning of where you can star
 
 ### Sending a Non-RakNet Packet
 To send a non-RakNet packet, first determine if segmentation is needed by comparing the buffer size to the MTU size minus 2, plus 3, plus 4 times 1 (for the datagram's data header byte length), and subtracting 11 if security is in use. Then, subtract the given value with the capsule size. If segmentation is necessary, reassemble the packet before adding it to the datagram queue for transmission. If no segmentation is required, add it directly to the queue. Remember, segmented packets must not be unreliable; if they are, convert them to reliable packets to guarantee successful and ordered delivery of all packet parts.
+
+## Resources
+Here are a list of resources to help you better understand the RakNet protocol:
+
+- <a href="https://github.com/facebookarchive/RakNet">Original RakNet</a>: Contains information on packets.
+- <a href="http://www.jenkinssoftware.com/">JenkinsSoftware</a>: The original raknet official website, Some of the information used in this documentation was taken from the website and combined with other sources to create a comprehensive guide.
+- <a href="https://datatracker.ietf.org/doc/html/rfc793">RFC-793</a>: Provides information about reliability, retransmission, packet reassembly, packet segmentation and flow control.
+- <a href="https://datatracker.ietf.org/doc/html/rfc5681">RFC-5681</a>: Provides information about congestion control.
+
+## FAQ
+Here are some frequently asked questions about this RakNet protocol documentation:
+
+1. Is this RakNet protocol documentation complete?
+	- While it does cover a lot of information, there may still be some areas that require further explanation. It is especially useful for those who are either just starting to implement RakNet or those who have already implemented it and want to check if what they have done is correct.
+
+2. Did you get help from someone?
+	- No, this documentation was created purely through research and was made by one person.
+
+3. Is there a Discord server where I can ask more questions related to this documentation?
+	- Yes, you can join the <a href="https://discord.gg/Ytwwgs5nFU">discord server</a> for further assistance and discussion.
