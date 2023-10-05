@@ -110,7 +110,7 @@ This packet is used to initiate the handshake process between a client and a ser
 | protocolVersion | uint8 | N/A | Protocol version supported by the client |
 | mtuSize | pad-with-zero | N/A | Maximum transmission unit (MTU) size of the client |
 
-> Note: when using pad-with-zero to pad the MTU size, the total size of the buffer should be the MTU size plus the current size of the buffer plus 28 bytes (used for the UDP header). You can also check if the packet buffer is valid by checking if the buffer size is 18 bytes so you know that what you are doing is correct
+> Note: when using pad-with-zero to pad the MTU size, the total size of the buffer should be the MTU size if you are padding then its minus if you are reading then ite plus the current size of the buffer plus 28 bytes (used for the UDP header). You can also check if the packet buffer is valid by checking if the buffer size is 18 bytes so you know that what you are doing is correct
 
 ### OpenConnectionReplyOne
 
@@ -380,6 +380,8 @@ Each datagram sent in RakNet is assigned a Reliability TypeID that specifies how
 
 * **ReliableArrangedWithAckReceipt:** This Reliability TypeID sends datagrams guaranteed to be delivered in the order they were sent but all datagrams before it that have not been acknowledged, and the receiver sends an acknowledgement receipt upon receipt of this datagram.
 
+For more information you can look at: <a href="https://datatracker.ietf.org/doc/html/rfc793">RFC 793</a>
+
 ### Reliability definitions
 Here you can find every reliablity definition which is used in other places at the documentation.
 
@@ -390,8 +392,12 @@ Here you can find every reliablity definition which is used in other places at t
 ### Retransmission
 RakNet uses selective repeat retransmission to ensure reliable delivery of datagrams. When a datagram is sent, it is assigned a sequence number. If a datagram is not acknowledged within a certain timeout period, RakNet will retransmit the datagram using the same sequence number. When the receiver receives a duplicate datagram with the same sequence number, it can discard it, since it has already acknowledged that sequence number.
 
+For more information you can look at: <a href="https://datatracker.ietf.org/doc/html/rfc793">RFC 793</a>
+
 ### AckQueue / NackQueue
 The AckQueue and NackQueue are used to keep track of which datagrams have been acknowledged and which have not. The AckQueue stores a list of datagram sequence numbers that have been successfully acknowledged, while the NackQueue stores a list of datagram sequence numbers that have not been acknowledged and need to be retransmitted. When a datagram is received with a sequence number that has already been acknowledged, it can be discarded.
+
+For more information you can look at: <a href="https://datatracker.ietf.org/doc/html/rfc793">RFC 793</a>
 
 ### PacketPair
 PacketPair is a technique used by RakNet to improve the efficiency of datagram retransmissions. When a datagram is acknowledged, RakNet sends the next datagram in the sequence as well. This allows the receiver to begin processing the next datagram immediately, reducing latency and improving throughput.
@@ -401,6 +407,23 @@ ContinuousSend is a feature of RakNet that allows datagrams to be sent continuou
 
 ### Reassembly
 RakNet uses a reassembly mechanism to reconstruct segmented datagrams that may be received out of order. When a datagram is segmented, each segment is assigned a unique identifier. When the receiver receives a segment, it is buffered until all segments with the same identifier have been received. Once all segments have been received, they are reassembled into the original datagram.
+
+For more information you can look at: <a href="https://datatracker.ietf.org/doc/html/rfc793">RFC 793</a>
+
+### Flow Control
+Flow Control is a RakNet mechanism used to manage the rate of data transmission between sender and receiver. It ensures that the receiver can handle the incoming data at a pace it can process, preventing overwhelming or overflowing the receiver's buffer. Flow control helps maintain a balance between the sender's transmission speed and the receiver's processing capability, optimizing the overall efficiency and stability of the communication.
+
+For more information you can look at: <a href="https://datatracker.ietf.org/doc/html/rfc793">RFC 793</a>
+
+### Congestion Control
+Congestion control is a RakNet technique used to prevent network congestion by balancing data transmission rates. Techniques like TCP congestion control, packet dropping, rate limiting, traffic shaping, QoS, and load balancing are used. These techniques ensure reliable data delivery and efficient transmission in RakNet.
+
+For more information you can look at: <a href="https://datatracker.ietf.org/doc/html/rfc5681">RFC 5681</a>
+
+### Segment
+Segmentation in RakNet enhances data delivery by dividing large messages into smaller segments. These segments, with headers indicating position and size, ensure successful reassembly on the receiver's end. By comparing the buffer size to the Maximum Transmission Unit (MTU) size (usually 1400), if the buffer exceeds the MTU, it is split into segments for transmission. This mechanism in RakNet prevents data loss, manages large payloads, and guarantees reliable transmission in networked applications.
+
+For more information you can look at: <a href="https://datatracker.ietf.org/doc/html/rfc793">RFC 793</a>
 
 ### B
 "B" represents the link capacity or the maximum amount of data that can be transmitted per second over the network link. The link capacity is determined by multiple factors, including the network infrastructure, the network configuration, and the available resources. By using a float value, the network capacity can be represented more accurately and precisely, enabling better utilization of the available resources.
@@ -421,4 +444,4 @@ To determine the size of the capsule layer, you can follow these steps:
 The UserPacketEnum ID is `0x86`, which marks the beginning of where you can start using your custom packet IDs.
 
 ### Sending a Non-RakNet Packet
-To send a reliable packet that is not associated with RakNet, you need to determine if it needs to be segmented. This can be done by checking the size of the buffer to be sent and comparing it to the Maximum Transmission Unit (MTU) size, which is typically 1400. If it exceeds the MTU size, subtract 2 and add 3, plus 4 times 1 (for the data header byte length of the datagram) and minus 11 if you are using security. If it needs to be segmented, it will undergo a reassembly process before being sent. After reassembly is complete, add it to a queue to be sent as a datagram. If segmentation is not necessary, it can be added to the queue immediately. It's important to note that if a packet is segmented, it must not be unreliable. If it is found to be unreliable, then it should be turned into a reliable packet to ensure all parts of the packet are delivered successfully and in the correct order. 
+To send a non-RakNet packet, first determine if segmentation is needed by comparing the buffer size to the MTU size minus 2, plus 3, plus 4 times 1 (for the datagram's data header byte length), and subtracting 11 if security is in use. Then, subtract the given value with the capsule size. If segmentation is necessary, reassemble the packet before adding it to the datagram queue for transmission. If no segmentation is required, add it directly to the queue. Remember, segmented packets must not be unreliable; if they are, convert them to reliable packets to guarantee successful and ordered delivery of all packet parts.
