@@ -108,7 +108,7 @@ This packet is used to initiate the handshake process between a client and a ser
 | protocolVersion | uint8 | N/A | Protocol version supported by the client |
 | mtuSize | pad-with-zero | N/A | Maximum transmission unit (MTU) size of the client |
 
-> Note: when using pad-with-zero to pad the MTU size, Get the MTU size subtracted with the current reading position plus 28 for (used for the UDP header) for reading it, For writing get the MTU size subtracted with the current buffer writing position or its size which is the same thing plus 28 for (used for the UDP header). You can also check if the packet buffer is valid by checking if the buffer size is 17 bytes so you know that what you are doing is correct
+> When using pad-with-zero, subtract the MTU size and the current reading position plus 28 (UDP header size) for reading. For writing, Get the MTU size plus the current buffer writing position (or its size) plus 28 (UDP header size). To validate the packet buffer, check if its size is 17 bytes to ensure correctness.
 
 ### OpenConnectionReplyOne
 
