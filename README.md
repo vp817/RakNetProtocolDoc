@@ -54,6 +54,69 @@ This is the latest RakNet protocol documentation. It includes information on the
 | ConnectionLost | 0x16 |
 | IncompatibleProtocolVersion | 0x19 |
 
+### RakNet Protocol Packet Send and Receive Sequence
+
+#### Server
+
+1. Wait for an UnconnectedPing packet from a client.
+   - This is a request from the client to check if the server is available and responding.
+   - Respond with an UnconnectedPong packet to let the client know that the server is available.
+   
+2. Wait for an OpenConnectionRequestOne packet from a client.
+   - This is the first part of a handshake protocol to initiate a connection request with the server.
+   - If the protocol version is correct, respond with an OpenConnectionReplyOne packet to acknowledge the connection request.
+   - If the protocol version is incorrect, respond with an IncompatibleProtocolVersion packet to inform the client that the connection request is rejected.
+   
+3. Wait for an OpenConnectionRequestTwo packet from the client.
+   - This is the second part of the handshake protocol to establish a connection with the server.
+   - Respond with an OpenConnectionReplyTwo packet to let the client know that the connection is established.
+   - Create a new connection for the client and save its connection information to handle future online packets.
+   
+4. Wait for datagrams from the client.
+   - Handle the datagrams received from the client as required, whether they are AckedDatagrams, NackedDatagrams, require B and AS values, or are segmented packets.
+   - After that you will receive inside the datagram received a list of packets that will be sent seperately down you will see them and understand
+		- Wait for an ConnectionRequest packet from the client
+			- Respond with an ConnectionRequestAccepted that is sent in a unreliable and not segmenteed datagram
+		- Wait for an ConnectionRequest packet from the client
+			- Respond with an ConnectionRequestAccepted that is sent in a unreliable and not segmenteed datagram
+		- Wait for an NewIncomingConneciton packet
+			- Check if the server port is the same as the address of the client inside NewIncomingConnection then mark it as connected if so.
+			- Response with a ConnectedPing packet.
+		- Wait for a DisconnectNotification
+			- Resend that packet to nofiy that it is handled that is sent in a unreliable and not segmenteed datagram
+		- Wait for a ConnectedPing
+			- Response with a ConnectedPong.
+
+#### Client
+
+1. Send an UnconnectedPing packet to the server.
+   - This is a request to check if the server is available and responding.
+   - Wait for an UnconnectedPong packet from the server to confirm that the server is available.
+
+2. Send an OpenConnectionRequestOne packet to the server.
+   - This is the first part of a handshake protocol to initiate a connection request with the server.
+   - Wait for an OpenConnectionReplyOne packet from the server to acknowledge the connection request.
+   - If an IncompatibleProtocolVersion packet is received instead of an OpenConnectionReplyOne packet, the connection request is rejected.
+
+3. Send an OpenConnectionRequestTwo packet to the server.
+   - This is the second part of the handshake protocol to establish a connection with the server.
+   - Wait for an OpenConnectionReplyTwo packet from the server to confirm that the connection is established.
+   - If the connection request is rejected, the client should start again from step 1.
+
+4. Send datagrams to the server.
+   - Handle the datagrams sent to the server as required, whether they are AckedDatagrams, NackedDatagrams, require B and AS values, or are segmented packets.
+   - After that you will receive inside the datagram received a list of packets that will be sent seperately down you will see them and understand
+		- Send a ConnectionRequest packet to the server.
+			- Wait for a ConnectionRequestAccepted packet from the server.
+		- Send a ConnectionRequest packet to the server.
+			- Wait for a ConnectionRequestAccepted packet from the server.
+		- Send a NewIncomingConnection packet to the server.
+			- Wait for a ConnectedPing packet from the server to confirm the connection is established.
+		- Send a DisconnectNotification packet to the server.
+			- Wait for the server to receive the packet and if you receive it that means its disconnected now.
+		- Send a ConnectedPing packet to the server.
+			- Wait for a ConnectedPong packet from the server to confirm the connection is still alive.
+
 ### UnconnectedPing
 
 This packet is used to determine if a server is online or not. It also include information about open connections.
