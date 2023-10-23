@@ -224,6 +224,7 @@ This packet is the response to an open connection request two packet.
 | clientAddress | uint8[7-29] | N/A | Client IP address and port combo |
 | mtuSize | uint16 | Big Endian | Maximum transmission unit (MTU) size of the server |
 | requiresEncryption | bool | N/A | Whether the connection requires encryption or not |
+| encryptionKey | uint8[???(Use the remaining bytes size when reading and the encryption key size when writing for now.)] | Only if requires encryption |
 
 ### ConnectionRequest
 
