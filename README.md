@@ -252,7 +252,7 @@ This packet is the response to an open connection request two packet.
 - If the `clientAddress` is already associated with a different `clientGuid`, set the connection state to 4, as someone else may have the same internet as the current client trying to connect.
 - Otherwise, set the state to 0.
 
-> Once you have calculated the `ConnectionState`, You will need to check if it is equal to 1 then follow what is stated below this note
+> Once you have calculated the `ConnectionState`, You will need to check if it is equal to 1 then follow what is stated below this note.
 
 ### OpenConnectionReplyTwo With ConnectionState equal to 1
 
