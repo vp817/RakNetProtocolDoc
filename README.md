@@ -48,6 +48,8 @@ This is the latest RakNet protocol documentation. It includes information on the
 | OpenConnectionReplyTwo | 0x08 |
 | ConnectionRequest | 0x09 |
 | RemoteSystemRequiresPublicKey | 0x0a |
+| OurSystemRequiresSecurity | 0x0b |
+| AlreadyConnected | 0x12|
 | ConnectionRequestAccepted | 0x10 |
 | NewIncomingConnection | 0x13 |
 | DisconnectionNotification | 0x15 |
@@ -212,6 +214,23 @@ This packet is used to complete the handshake process between a client and a ser
 | mtuSize | uint16 | Big Endian | Maximum transmission unit (MTU) size of the client |
 | clientGuid | uint64 | Big Endian | Unique identifier for the client |
 
+### OpenConnectionRequestTwo If OpenConnectionReplyOne has security
+
+This packet is used to complete the handshake process between a client and a server.
+
+| Field | Type | Endianness | Note |
+| ----- | ---- | ----------| ----- |
+| id | uint8 | N/A | Unique identifier for the request |
+| magic | uint8[16] | N/A | Magic sequence to identify the packet |
+| cookie | uint32 | Big Endian | Cookie value |
+| containsChallenge | bool | N/A | Whether the system requires handshake challenge |
+| challenge | uint8[64] | N/A | The system handshake challenge bytes |
+| serverAddress | uint8[7-29] | N/A | Server IP address and port combo |
+| mtuSize | uint16 | Big Endian | Maximum transmission unit (MTU) size of the client |
+| clientGuid | uint64 | Big Endian | Unique identifier for the client |
+
+> Note: if the OpenConnectionReplyOne packet has security but this packet does not contain a challenge, the client should immediately send a RemoteSystemRequiresPublicKey packet to notify the server that there was no challenge in the OpenConnectionRequestTwo packet.
+
 ### OpenConnectionReplyTwo
 
 This packet is the response to an open connection request two packet.
@@ -224,7 +243,32 @@ This packet is the response to an open connection request two packet.
 | clientAddress | uint8[7-29] | N/A | Client IP address and port combo |
 | mtuSize | uint16 | Big Endian | Maximum transmission unit (MTU) size of the server |
 | requiresEncryption | bool | N/A | Whether the connection requires encryption or not |
-| encryptionKey | uint8[???(Use the remaining bytes size when reading and the encryption key size when writing for now.)] | Only if requires encryption |
+
+**Calculating ConnectionState**:
+- Find the client associated with the provided `clientAddress`.
+  - If the client is not currently connected, set the local variable `state` to 1.
+  - Otherwise, set it to 2.
+- If the `clientGuid` provided in the request is already associated with a client that has a different `clientAddress`, set the connection state to 3.
+- If the `clientAddress` is already associated with a different `clientGuid`, set the connection state to 4, as someone else may have the same internet as the current client trying to connect.
+- Otherwise, set the state to 0.
+
+> Once you have calculated the `ConnectionState`, You will need to check if it is equal to 1 then follow what is stated below this note
+
+### OpenConnectionReplyTwo With ConnectionState equal to 1
+
+This packet is the response to an open connection request two packet.
+
+| Field | Type | Endianness | Note |
+| ----- | ---- | ----------| ----- |
+| id | uint8 | N/A | Unique identifier associated with the request |
+| magic | uint8[16] | N/A | Magic sequence to identify the packet |
+| serverGuid | uint64 | Big Endian | Unique identifier for the server |
+| clientAddress | uint8[7-29] | N/A | Client IP address and port combo |
+| mtuSize | uint16 | Big Endian | Maximum transmission unit (MTU) size of the server |
+| requiresEncryption | bool | N/A | Whether the connection requires encryption or not |
+| encryptionKey | uint8[128] | N/A | The encryption key of the client - it is only written or read if the `requiresEncryption` field is set to true. |
+
+> If the `ConnectionState` is not 0, send the `AlreadyConnected` packet.
 
 ### ConnectionRequest
 
@@ -244,7 +288,7 @@ This packet is used to establish a connection between a client and a server with
 
 ### RemoteSystemRequiresPublicKey
 
-This packet is used to request public keys for client authentication and identification.
+This packet is used to throw the errors related to public key requests for client authentication and identification.
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
@@ -258,6 +302,26 @@ This packet is used to request public keys for client authentication and identif
 | ServerPublicKeyIsMissing | 0 |
 | ClientIdentityIsMissing | 1 |
 | ClientIdentityIsInvalid | 2 |
+
+### OurSystemRequiresSecurity
+
+This packet is sent when the server does not require security but it is still mandatory.
+
+| Field | Type | Endianness | Note |
+| ----- | ---- | ----------| ----- |
+| id | uint8 | N/A | Unique identifier for the request |
+| clientAddress | uint8[7-29] | N/A | Client IP address and port combo |
+| serverGuid | uint64 | Big Endian | Unique identifier for the server |
+
+### AlreadyConnected
+
+This packet is sent when the client is already connected.
+
+| Field | Type | Endianness | Note |
+| ----- | ---- | ----------| ----- |
+| id | uint8 | N/A | Unique identifier for the request |
+| magic | uint8[16] | N/A | Magic sequence to identify the packet |
+| clientGuid | uint64 | Big Endian | Unique identifier for the client |
 
 ### ConnectionRequestAccepted
 
@@ -513,3 +577,11 @@ Here are some frequently asked questions about this RakNet protocol documentatio
 
 3. Is there a Discord server where I can ask more questions related to this documentation?
 	- Yes, you can join the <a href="https://discord.gg/Ytwwgs5nFU">discord server</a> for further assistance and discussion.
+4. What programming languages can implement this protocol?
+	- RakNet can be implemented in different programming languages like C++, C#, Java, Lua, and more.
+
+5. Is the RakNet protocol still being updated?
+	- RakNet is not currently being actively developed or updated as the original developers have moved on to other projects. However, the protocol is still widely used and has been forked by other developers to continue development and support.
+
+6. Can RakNet be used for game development?
+	- Yes, RakNet is commonly used in game development as it provides a reliable and efficient networking solution. RakNet also includes features for data encryption and security, making it a good option for online multiplayer games.
