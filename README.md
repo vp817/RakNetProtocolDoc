@@ -410,9 +410,9 @@ This structure is used to represent the missing ranges of a NackedDatagram.
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
 | size | uint24 | Little Endian | Number of ranges in the array |
-| isSingle | bool | N/A | If true, there is only one missing range |
-| min | uint24 | Little Endian | Minimum value in the range |
-| max | uint24 | Little Endian | Maximum value in the range |
+| isSingle | bool | N/A | If min is equals to max, then this is set to true |
+| min | uint24 | Little Endian | Minimum value in the range|
+| max | uint24 | Little Endian | Maximum value in the range - Is not wrote if is single |
 
 ### ValidDatagram
 
