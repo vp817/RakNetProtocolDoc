@@ -355,9 +355,6 @@ This packet is sent when a connection to a client is lost.
 | id | uint8 | N/A | Unique identifier associated with the lost connection |
 | clientGuid | uint64 | Big Endian | Unique identifier for the client |
 | clientAddress | uint8[7-29] | N/A | Client IP address and port combo |
-| wasGeneratedLocaly | bool | N/A | Whether the packet was generated locally |
-
-> Note: If you're not sure what to set `wasGeneratedLocaly` to, just set it to `true`.
 
 ### IncompatibleProtocolVersion
 
