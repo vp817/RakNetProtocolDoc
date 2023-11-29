@@ -402,11 +402,11 @@ This packet is a response to a ValidDatagram indicating that the server has not 
 
 ### Range
 
-This structure is used to represent the missing ranges of a NackedDatagram.
+This structure is used to represent the ranges of AckedDatagrams and the missing ranges of NackedDatagrams.
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
-| size | uint24 | Little Endian | Number of ranges in the array |
+| size | uint16 | Big Endian | Number of ranges in the array |
 | isSingle | bool | N/A | If min is equals to max, then this is set to true |
 | min | uint24 | Little Endian | Minimum value in the range|
 | max | uint24 | Little Endian | Maximum value in the range - Is not wrote if is single |
