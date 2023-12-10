@@ -197,7 +197,7 @@ This packet is the response to an open connection request one packet with additi
 | magic | uint8[16] | N/A | Magic sequence to identify the packet |
 | serverGuid | uint64 | Big Endian | Unique identifier for the server |
 | serverHasSecurity | bool | N/A | Whether the server requires security or not |
-| hasCookieON | bool | N/A | Whether the packet includes a cookie |
+| hasCookie | bool | N/A | Whether the packet includes a cookie |
 | cookie | uint32 | Big Endian | Cookie value |
 | serverPublicKey | uint8[294] | N/A | Public key used for encryption |
 | mtuSize | uint16 | Big Endian | Maximum transmission unit (MTU) size of the server |
@@ -242,7 +242,7 @@ This packet is the response to an open connection request two packet.
 | serverGuid | uint64 | Big Endian | Unique identifier for the server |
 | clientAddress | uint8[7-29] | N/A | Client IP address and port combo |
 | mtuSize | uint16 | Big Endian | Maximum transmission unit (MTU) size of the server |
-| requiresEncryption | bool | N/A | Whether the connection requires encryption or not |
+| requiresEncryption | bit | N/A | Whether the connection requires encryption or not |
 | encryptionKey | uint8[128] | N/A | The encryption key of the client - it is only written or read if the `requiresEncryption` field is set to true. |
 
 **Calculating ConnectionState**:
