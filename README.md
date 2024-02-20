@@ -556,15 +556,13 @@ Here are some frequently asked questions about this RakNet protocol documentatio
 1. Is this RakNet protocol documentation complete?
 	- While it does cover a lot of information, there may still be some areas that require further explanation. It is especially useful for those who are either just starting to implement RakNet or those who have already implemented it and want to check if what they have done is correct.
 
-2. Did you get help from someone?
-	- No, this documentation was created purely through research and was made by one person.
-
-3. Is there a Discord server where I can ask more questions related to this documentation?
+2. Is there a Discord server where I can ask more questions related to this documentation?
 	- Yes, you can join the <a href="https://discord.gg/Ytwwgs5nFU">discord server</a> for further assistance and discussion.
-4. What programming languages can implement this protocol?
+
+3. What programming languages can implement this protocol?
 	- RakNet can be implemented in different programming languages like C++, C#, Java, Lua, and more.
 
-5. Is the RakNet protocol still being updated?
+4. Is the RakNet protocol still being updated?
 	- RakNet is not currently being actively developed or updated as the original developers have moved on to other projects. However, the protocol is still widely used and has been forked by other developers to continue development and support.
 
 6. Can RakNet be used for game development?
