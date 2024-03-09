@@ -27,7 +27,7 @@ This is the latest RakNet protocol documentation. It includes information on the
 | magic | 16 bytes | An array of unsigned 8-bit integers with a specific sequence and it is: `[0x00, 0xFF, 0xFF, 0x00, 0xFE, 0xFE, 0xFE, 0xFE, 0xFD, 0xFD, 0xFD, 0xFD, 0x12, 0x34, 0x56, 0x78]` |
 | pad-with-zero | variable | Null bytes used for padding with a size of your choice |
 | bool | 1 byte | Write or read as a single unsigned 8-bit integer, with a value of 0 or 1 (Zero is used to represent false, and One is used to represent true) |
-| address | 7-29 bytes | IPv4: 1 byte (address version), 4 bytes (IP address), 2 bytes (port), IPv6: 1 byte (address version), 2 bytes (address family), 2 bytes (port), 4 bytes (flow info), 16 bytes (IP address), 4 bytes (scope ID) |
+| address | 7-29 bytes | IPv4: 1 byte (address version), 4 bytes (IP address), 2 bytes (port), IPv6: 1 byte (address version), unsigned short for address family (in little-endian), unsigned short for port number, unsigned integer for flow info, 16 bytes for the address, an unsigned integer for the scope ID. |
 | bit | 1 bit | Write or read the bit inside the buffer after you completed it |
 | float | 4 bytes | IEEE 754 single-precision floating-point number |
 
