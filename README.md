@@ -464,7 +464,7 @@ This structure represents the segmentation of a capsule in a ValidDatagram.
 Each datagram sent in RakNet is assigned a Reliability TypeID that specifies how the data should be handled by the protocol. The following table lists the available Reliability TypeIDs and their properties:
 
 | Name                     | ID  | Is Reliable | Is Arranged | Is Sequenced |
-| ------------------------| --- | -----------| -----------|--------------|
+| ------------------------ | --- | ----------- | ----------- | -------------- |
 | Unreliable               | 0   | No          | No         | No           |
 | UnreliableSequenced      | 1   | No          | Yes        | Yes          |
 | Reliable                 | 2   | Yes         | No         | No           |
