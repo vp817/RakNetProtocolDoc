@@ -4,8 +4,6 @@ This is the latest RakNet protocol documentation. It includes information on the
 
 ## Data Types
 
-### Integer Data Types
-
 | Type | Size | Note |
 | ---- | ---- | ---- |
 | uint8 | 1 byte | Unsigned 8-bit integer |
@@ -13,17 +11,7 @@ This is the latest RakNet protocol documentation. It includes information on the
 | uint24 | 3 bytes | Unsigned 24-bit integer with a minimum value of 0 and a maximum value of 16777215 |
 | uint32 | 4 bytes | Unsigned 32-bit integer |
 | uint64 | 4/8 bytes | Unsigned 64-bit integer (4 bytes for 32-bit systems, 8 bytes for 64-bit systems) |
-
-### String Data Types
-
-| Type | Size | Note |
-| ---- | ---- | ---- |
 | uint16-string | variable | UTF-8 encoded string with a length of 2 bytes preceding the string |
-
-### Other Data Types
-
-| Type | Size | Note |
-| ---- | ---- | ---- |
 | magic | 16 bytes | An array of unsigned 8-bit integers with a specific sequence and it is: `[0x00, 0xFF, 0xFF, 0x00, 0xFE, 0xFE, 0xFE, 0xFE, 0xFD, 0xFD, 0xFD, 0xFD, 0x12, 0x34, 0x56, 0x78]` |
 | pad-with-zero | variable | Null bytes used for padding with a size of your choice |
 | bool | 1 byte | Write or read as a single unsigned 8-bit integer, with a value of 0 or 1 (Zero is used to represent false, and One is used to represent true) |
