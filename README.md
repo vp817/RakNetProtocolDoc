@@ -378,8 +378,6 @@ This packet is a response to a ValidDatagram indicating that the server has rece
 | AS | float | Big Endian | Data arrival rate |
 | ranges | Range | N/A | Array of range values that were received |
 
-> Note: Prepare a new buffer for B and AS before proceeding further.
-
 ### NackedDatagram
 
 This packet is a response to a ValidDatagram indicating that the server has not received all of the expected data.
