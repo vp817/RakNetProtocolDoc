@@ -417,7 +417,7 @@ This structure represents a capsule layer in a ValidDatagram.
 | ----- | ---- | ----------| ----- |
 | reliability | 3 bits | Big Endian | Type of reliability used |
 | isSegmented | bit | N/A | If true, the packet is segmented |
-| size | uint16 | Big Endian | Size of the buffer in bits |
+| size | uint16 | Big Endian | Size of the buffer field down there in bits |
 | reliableCapsuleIndex | uint24 | Little Endian | Index used for reliable packets (it means use reliability for this) |
 | sequencedCapsuleIndex | uint24 | Little Endian | Index used for sequenced packets (it means use reliability for this) |
 | arrangement | CapsuleArrangement | N/A | Arrangement of the capsule used for sequenced and arranged packets (it means use reliability for this) |
