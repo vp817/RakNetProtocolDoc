@@ -404,7 +404,7 @@ This packet is used for sending and receiving data between clients and the serve
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
 | isPacketPair | bit | N/A | If true, the packet is one of two associated packets |
-| isContinousSend | bit | N/A | If true, the packet is a continuous send packet |
+| isContinuousSend | bit | N/A | If true, the packet is a continuous send packet |
 | requiresBAndAS | bit | N/A | If true, the packet includes B and AS values |
 | rangeNumber | uint24 | Little Endian | The sequence number of the datagram |
 | capsuleLayers | DatagramCapsuleLayer[] | N/A | Array of capsule layers in the packet |
