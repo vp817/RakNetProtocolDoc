@@ -422,7 +422,7 @@ This structure represents a capsule layer in a ValidDatagram.
 | sequencedCapsuleIndex | uint24 | Little Endian | Index used for sequenced packets |
 | arrangement | CapsuleArrangement | N/A | Arrangement of the capsule used for sequenced and arranged packets |
 | segment | CapsuleSegment | N/A | Segment of the capsule used when capsule is segmented |
-| buffer | Buffer | N/A | Buffer data |
+| buffer | Buffer | N/A | Buffer data containing the data wanted to be sent through networks |
 
 ### CapsuleArrangement
 
