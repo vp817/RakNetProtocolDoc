@@ -94,15 +94,13 @@ This is the latest RakNet protocol documentation. It includes information on the
    - If the connection request is rejected, the client should start again from step 1.
 
 4. Send datagrams to the server.
-   - Handle the datagrams sent to the server as required, whether they are AckedDatagrams, NackedDatagrams, require B and AS values, or are segmented packets.
-   - After that you will receive inside the datagram received a list of packets that will be sent seperately down you will see them and understand
-		- Send a ConnectionRequest packet to the server.
-			- Wait for a ConnectionRequestAccepted packet from the server.
+   - Handle the datagrams sent to the client, whether they are AckedDatagrams, NackedDatagrams, require B and AS values, or are segmented packets.
+   - But before handling, at when you handle the OpenConnectionReplyTwo or anywhere related such as if the OpenConnectionReplyTwo got received, you need to do the following after you do what you want:
 		- Send a ConnectionRequest packet to the server.
 			- Wait for a ConnectionRequestAccepted packet from the server.
 		- Send a NewIncomingConnection packet to the server.
 			- Wait for a ConnectedPing packet from the server to confirm the connection is established.
-		- Send a DisconnectNotification packet to the server.
+		- Send a DisconnectNotification packet to the server. (if you want to disconnect)
 			- Wait for the server to receive the packet and if you receive it that means its disconnected now.
 		- Send a ConnectedPing packet to the server.
 			- Wait for a ConnectedPong packet from the server to confirm the connection is still alive.
