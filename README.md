@@ -231,7 +231,7 @@ This packet is the response to an open connection request two packet.
 | requiresEncryption | bit | N/A | Whether the connection requires encryption or not |
 | encryptionKey | uint8[128] | N/A | The encryption key of the client - it is only written or read if the `requiresEncryption` field is set to true. |
 
-**Calculating ConnectionState**:
+**Calculating ConnectionOutcome**:
 - Find the client associated with the provided `clientAddress`.
   - If the client is not currently connected, set the local variable `state` to 1.
   - Otherwise, set it to 2.
@@ -239,19 +239,19 @@ This packet is the response to an open connection request two packet.
 - If the `clientAddress` is already associated with a different `clientGuid`, set the connection state to 4, as someone else may have the same internet as the current client trying to connect.
 - Otherwise, set the state to 0.
 
-> Once you have calculated the `ConnectionState`, You will need to check if it is equal to 1 then send the `OpenConnectionReplyTwo` packet.
+> Once you have calculated the `ConnectionOutcome`, You will need to check if it is equal to 1 then send the `OpenConnectionReplyTwo` packet.
 
-> If the `ConnectionState` is not 0, send the `AlreadyConnected` packet.
+> If the `ConnectionOutcome` is not 0, send the `AlreadyConnected` packet.
 
 ### ConnectionRequest
 
-This packet is used to establish a connection between a client and a server with security enabled.
+This packet is used to establish a connection between a client and a server with security enabled or disabled.
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
 | id | uint8 | N/A | Unique identifier for the request |
 | clientGuid | uint64 | Big Endian | Unique identifier for the client |
-| serverSendTime | uint64 | Big Endian | Timestamp for the server |
+| clientSendTime | uint64 | Big Endian | Timestamp of the client when it requested to be connected |
 | doSecurity | bool | N/A | Whether the connection requires security or not |
 | clientProof | uint8[32] | N/A | Proof of client authentication |
 | doIdentity | bool | N/A | Whether the packet requires an identity proof |
