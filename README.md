@@ -317,7 +317,6 @@ This packet is sent to all other clients when a new client connects to the serve
 | ----- | ---- | ----------| ----- |
 | id | uint8 | N/A | Unique identifier associated with the connection |
 | serverAddress | uint8[7-29] | N/A | Server IP address and port combo |
-| clientIndex | uint16 | Big Endian | Unique identifier assigned to the client |
 | clientMachineAddresses | address[10] | N/A | Client local machine addresses |
 | clientSendTime | uint64 | Big Endian | Timestamp for the client |
 | serverSendTime | uint64 | Big Endian | Timestamp for the server |
