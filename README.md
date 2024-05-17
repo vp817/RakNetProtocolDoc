@@ -305,7 +305,7 @@ This packet is the response to a connection request with security enabled.
 | id | uint8 | N/A | Unique identifier associated with the request |
 | clientAddress | uint8[7-29] | N/A | Client IP address and port combo |
 | clientIndex | uint16 | Big Endian | Unique identifier assigned to the client |
-| serverMachineAddresses | address[10] | N/A | Server machine addresses |
+| serverMachineAddresses | address[10] | N/A | Server local machine addresses |
 | clientSendTime | uint64 | Big Endian | Timestamp for the client |
 | serverSendTime | uint64 | Big Endian | Timestamp for the server |
 
@@ -318,7 +318,7 @@ This packet is sent to all other clients when a new client connects to the serve
 | id | uint8 | N/A | Unique identifier associated with the connection |
 | serverAddress | uint8[7-29] | N/A | Server IP address and port combo |
 | clientIndex | uint16 | Big Endian | Unique identifier assigned to the client |
-| clientMachineAddresses | address[10] | N/A | Client machine addresses |
+| clientMachineAddresses | address[10] | N/A | Client local machine addresses |
 | clientSendTime | uint64 | Big Endian | Timestamp for the client |
 | serverSendTime | uint64 | Big Endian | Timestamp for the server |
 
