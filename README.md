@@ -23,26 +23,27 @@ This is the latest RakNet protocol documentation. It includes information on the
 
 ### Packet Identifiers
 
-| Name | ID |
-| ---- | -- |
-| UnconnectedPing | 0x01 |
-| UnconnectedPingOpenConnections | 0x02 |
-| UnconnectedPong | 0x1c |
-| ConnectedPing | 0x00 |
-| ConnectedPong | 0x03 |
-| OpenConnectionRequestOne | 0x05 |
-| OpenConnectionReplyOne | 0x06 |
-| OpenConnectionRequestTwo | 0x07 |
-| OpenConnectionReplyTwo | 0x08 |
-| ConnectionRequest | 0x09 |
-| RemoteSystemRequiresPublicKey | 0x0a |
-| OurSystemRequiresSecurity | 0x0b |
-| AlreadyConnected | 0x12|
-| ConnectionRequestAccepted | 0x10 |
-| NewIncomingConnection | 0x13 |
-| DisconnectionNotification | 0x15 |
-| ConnectionLost | 0x16 |
-| IncompatibleProtocolVersion | 0x19 |
+| Name | ID | Type |
+| ---- | -- | ---- |
+| UnconnectedPing | 0x01 | OFFLINE |
+| UnconnectedPingOpenConnections | 0x02 | OFFLINE |
+| UnconnectedPong | 0x1c | OFFLINE |
+| ConnectedPing | 0x00 | ONLINE [from/to datagram] |
+| ConnectedPong | 0x03 | ONLINE [from/to datagram] |
+| OpenConnectionRequestOne | 0x05 | OFFLINE |
+| OpenConnectionReplyOne | 0x06 | OFFLINE |
+| OpenConnectionRequestTwo | 0x07 | OFFLINE |
+| OpenConnectionReplyTwo | 0x08 | OFFLINE |
+| ConnectionRequest | 0x09 | ONLINE [from/to datagram] |
+| RemoteSystemRequiresPublicKey | 0x0a | OFFLINE |
+| OurSystemRequiresSecurity | 0x0b | BOTH [????] |
+| ConnectionAttemptFailed | 0x11 | OFFLINE |
+| AlreadyConnected | 0x12 | OFFLINE |
+| ConnectionRequestAccepted | 0x10 | ONLINE [from/to datagram] |
+| NewIncomingConnection | 0x13 | ONLINE [from/to datagram] |
+| DisconnectionNotification | 0x15 | ONLINE |
+| ConnectionLost | 0x16 | BOTH |
+| IncompatibleProtocolVersion | 0x19 | ONLINE |
 
 ### RakNet Protocol Packet Send and Receive Sequence
 
@@ -112,7 +113,7 @@ This packet is used to determine if a server is online or not. It also include i
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
 | onlyReplyOnOpenConnections | bool | N/A | If set to true, the server will only send a reply if the client's connection to the server is currently open. This helps to prevent sending responses to clients that have closed their connections. This is especially useful in peer-to-peer networks where clients may come and go frequently. By setting this field to true, the client can avoid wasting network resources by only sending requests when it knows that the server will be able to respond. The resulting message ID for the request would be `UnconnectedPingOpenConnections`. If set to false, the default behavior is `UnconnectedPing`. |
-| id | uint8 | N/A | Unique identifier for the ping |
+| id | uint8 | N/A | Unique identifier of the packet |
 | clientSendTime | uint64 | Big Endian | Client timestamp used to calculate the latency |
 | magic | uint8[16] | N/A | Magic sequence to identify the packet |
 | clientGuid | uint64 | Big Endian | Unique identifier for the client |
@@ -123,7 +124,7 @@ This packet is the response to an unconnected ping packet.
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
-| id | uint8 | N/A | Unique identifier associated with the ping |
+| id | uint8 | N/A | Unique identifier of the packet |
 | serverSendTime | uint64 | Big Endian | Server timestamp used to calculate the latency |
 | serverGuid | uint64 | Big Endian | Unique identifier for the server |
 | magic | uint8[16] | N/A | Magic sequence to identify the packet |
@@ -135,7 +136,7 @@ This packet is used to keep the connection alive between the client and the serv
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
-| id | uint8 | N/A | Unique identifier for the ping |
+| id | uint8 | N/A | Unique identifier of the packet |
 | clientSendTime | uint64 | Big Endian | Client timestamp used to calculate the latency |
 
 ### ConnectedPong
@@ -144,7 +145,7 @@ This packet is the response to a connected ping packet.
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
-| id | uint8 | N/A | Unique identifier associated with the ping |
+| id | uint8 | N/A | Unique identifier of the packet |
 | clientSendTime | uint64 | Big Endian | Client timestamp from the ping |
 | serverSendTime | uint64 | Big Endian | Server timestamp used to calculate the latency |
 
@@ -154,7 +155,7 @@ This packet is used to initiate the handshake process between a client and a ser
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
-| id | uint8 | N/A | Unique identifier for the request |
+| id | uint8 | N/A | Unique identifier of the packet |
 | magic | uint8[16] | N/A | Magic sequence to identify the packet |
 | protocolVersion | uint8 | N/A | Protocol version supported by the client |
 | mtuSize | pad-with-zero | N/A | Maximum transmission unit (MTU) size of the client |
@@ -167,7 +168,7 @@ This packet is the response to an open connection request one packet.
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
-| id | uint8 | N/A | Unique identifier associated with the request |
+| id | uint8 | N/A | Unique identifier of the packet |
 | magic | uint8[16] | N/A | Magic sequence to identify the packet |
 | serverGuid | uint64 | Big Endian | Unique identifier for the server |
 | serverHasSecurity | bool | N/A | Whether the server requires security or not |
@@ -179,7 +180,7 @@ This packet is the response to an open connection request one packet with additi
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
-| id | uint8 | N/A | Unique identifier associated with the request |
+| id | uint8 | N/A | Unique identifier of the packet |
 | magic | uint8[16] | N/A | Magic sequence to identify the packet |
 | serverGuid | uint64 | Big Endian | Unique identifier for the server |
 | serverHasSecurity | bool | N/A | Whether the server requires security or not |
@@ -194,7 +195,7 @@ This packet is used to complete the handshake process between a client and a ser
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
-| id | uint8 | N/A | Unique identifier for the request |
+| id | uint8 | N/A | Unique identifier of the packet |
 | magic | uint8[16] | N/A | Magic sequence to identify the packet |
 | serverAddress | uint8[7-29] | N/A | Server IP address and port combo |
 | mtuSize | uint16 | Big Endian | Maximum transmission unit (MTU) size of the client |
@@ -206,7 +207,7 @@ This packet is used to complete the handshake process between a client and a ser
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
-| id | uint8 | N/A | Unique identifier for the request |
+| id | uint8 | N/A | Unique identifier of the packet |
 | magic | uint8[16] | N/A | Magic sequence to identify the packet |
 | cookie | uint32 | Big Endian | Cookie value |
 | containsChallenge | bool | N/A | Whether the system requires handshake challenge |
@@ -223,7 +224,7 @@ This packet is the response to an open connection request two packet.
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
-| id | uint8 | N/A | Unique identifier associated with the request |
+| id | uint8 | N/A | Unique identifier of the packet |
 | magic | uint8[16] | N/A | Magic sequence to identify the packet |
 | serverGuid | uint64 | Big Endian | Unique identifier for the server |
 | clientAddress | uint8[7-29] | N/A | Client IP address and port combo |
@@ -249,7 +250,7 @@ This packet is used to establish a connection between a client and a server with
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
-| id | uint8 | N/A | Unique identifier for the request |
+| id | uint8 | N/A | Unique identifier of the packet |
 | clientGuid | uint64 | Big Endian | Unique identifier for the client |
 | clientSendTime | uint64 | Big Endian | Timestamp of the client when it requested to be connected |
 | doSecurity | bool | N/A | Whether the connection requires security or not |
@@ -265,7 +266,7 @@ This packet is used to throw the errors related to public key requests for clien
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
-| id | uint8 | N/A | Unique identifier for the request |
+| id | uint8 | N/A | Unique identifier of the packet |
 | typeID | uint8 | N/A | Type of public key request |
 
 #### RemoteSystemRequiresPublicKey Type IDs
@@ -282,9 +283,17 @@ This packet is sent when the server does not require security but it is still ma
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
-| id | uint8 | N/A | Unique identifier for the request |
+| id | uint8 | N/A | Unique identifier of the packet |
 | clientAddress | uint8[7-29] | N/A | Client IP address and port combo |
 | serverGuid | uint64 | Big Endian | Unique identifier for the server |
+
+### ConnectionAttemptFailed
+
+This packet is sent when the attempt count trying to join the server is higher than a certain amount (depends on your implementation) or the client does not contain an assigned address; this is what you check and send if the requirements are met before sending the `OpenConnectionRequestOne` packet.
+
+| Field | Type | Endianness | Note |
+| ----- | ---- | ----------| ----- |
+| id | uint8 | N/A | Unique identifier of the packet |
 
 ### AlreadyConnected
 
@@ -292,7 +301,7 @@ This packet is sent when the client is already connected.
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
-| id | uint8 | N/A | Unique identifier for the request |
+| id | uint8 | N/A | Unique identifier of the packet |
 | magic | uint8[16] | N/A | Magic sequence to identify the packet |
 | clientGuid | uint64 | Big Endian | Unique identifier for the client |
 
@@ -302,7 +311,7 @@ This packet is the response to a connection request with security enabled.
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
-| id | uint8 | N/A | Unique identifier associated with the request |
+| id | uint8 | N/A | Unique identifier of the packet |
 | clientAddress | uint8[7-29] | N/A | Client IP address and port combo |
 | clientIndex | uint16 | Big Endian | Unique identifier assigned to the client |
 | serverMachineAddresses | address[10] | N/A | Server local machine addresses |
@@ -315,7 +324,7 @@ This packet is sent to all other clients when a new client connects to the serve
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
-| id | uint8 | N/A | Unique identifier associated with the connection |
+| id | uint8 | N/A | Unique identifier of the packet |
 | serverAddress | uint8[7-29] | N/A | Server IP address and port combo |
 | clientMachineAddresses | address[10] | N/A | Client local machine addresses |
 | clientSendTime | uint64 | Big Endian | Timestamp for the client |
@@ -329,7 +338,7 @@ This packet is sent when a client disconnects from the server.
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
-| id | uint8 | N/A | Unique identifier for the disconnection |
+| id | uint8 | N/A | Unique identifier of the packet |
 
 ### ConnectionLost
 
@@ -337,7 +346,7 @@ This packet is sent when a connection to a client is lost.
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
-| id | uint8 | N/A | Unique identifier associated with the lost connection |
+| id | uint8 | N/A | Unique identifier of the packet |
 | clientGuid | uint64 | Big Endian | Unique identifier for the client |
 | clientAddress | uint8[7-29] | N/A | Client IP address and port combo |
 
@@ -347,7 +356,7 @@ This packet is sent when a client attempts to connect to a server with an incomp
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
-| id | uint8 | N/A | Unique identifier associated with the connection |
+| id | uint8 | N/A | Unique identifier of the packet |
 | protocolVersion | uint8 | N/A | Protocol version supported by the server |
 | magic | uint8[16] | N/A | Magic sequence to identify the packet |
 | serverGuid | uint64 | Big Endian | Unique identifier for the server |
@@ -446,8 +455,8 @@ This structure represents the segmentation of a capsule in a ValidDatagram.
 
 Each datagram sent in RakNet is assigned a Reliability TypeID that specifies how the data should be handled by the protocol. The following table lists the available Reliability TypeIDs and their properties:
 
-| Name                     | ID  | Is Reliable | Is Arranged | Is Sequenced |
-| ------------------------ | --- | ----------- | ----------- | -------------- |
+| Name | ID  | Is Reliable | Is Arranged | Is Sequenced |
+| ---- | --- | ----------- | ----------- | ------------ |
 | Unreliable               | 0   | No          | No         | No           |
 | UnreliableSequenced      | 1   | No          | Yes        | Yes          |
 | Reliable                 | 2   | Yes         | No         | No           |
