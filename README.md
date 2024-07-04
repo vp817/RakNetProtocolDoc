@@ -516,6 +516,22 @@ To determine the size of the capsule layer, you can follow these steps:
 ### UserPacketEnum
 The UserPacketEnum ID is `0x86`, which marks the beginning of where you can start using your custom packet IDs.
 
+What is recommended is to create a `PacketAggregator` considering you have a completed implementation then send and receive it.
+
+You can put an id of your choice, like: `UserPacketEnumID` + your id (it must not make the `UserPacketEnumID` surpass the `uint8 limit` (0xff))
+
+For example: `UserPacketEnumID` + 22 = 0x9c
+
+The packet structue recommended:
+
+| Field | Type | Endianness | Note |
+| ----- | ---- | ----------| ----- |
+| id | uint8 | N/A | Unique identifier of the packet |
+| compressionAlgorithm | uint8 | The compression algorithm [Can be none, openssl, zlib, gzip, snappy, anything] |
+| streams | buffer[] | An array of packet streams (Each element in the streams array represents a packet buffer which is encoded/and is to be decoded in the `compressionAlgorithm`) |
+
+After that you will send it in the valid datagram capsule/s buffer
+
 ### Sending a Non-RakNet Packet
 To send a non-RakNet packet, first determine if segmentation is needed by comparing the buffer size to the MTU size minus 2, plus 3, plus 4 times 1 (for the datagram's data header byte length), and subtracting 11 if security is in use. Then, subtract the given value with the capsule size. If segmentation is necessary, reassemble the packet before adding it to the datagram queue for transmission. If no segmentation is required, add it directly to the queue. Remember, segmented packets must not be unreliable; if they are, convert them to reliable packets to guarantee successful and ordered delivery of all packet parts.
 
