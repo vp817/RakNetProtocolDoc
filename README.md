@@ -455,34 +455,19 @@ This structure represents the segmentation of a capsule in a ValidDatagram.
 
 Each datagram sent in RakNet is assigned a Reliability TypeID that specifies how the data should be handled by the protocol. The following table lists the available Reliability TypeIDs and their properties:
 
-| Name | ID  | Is Reliable | Is Arranged | Is Sequenced |
-| ---- | --- | ----------- | ----------- | ------------ |
-| Unreliable               | 0   | No          | No         | No           |
-| UnreliableSequenced      | 1   | No          | Yes        | Yes          |
-| Reliable                 | 2   | Yes         | No         | No           |
-| ReliableArranged         | 3   | Yes         | Yes        | No           |
-| ReliableSequenced        | 4   | Yes         | Yes        | Yes          |
-| UnreliableWithAckReceipt | 5   | No          | No         | No           |
-| ReliableWithAckReceipt   | 6   | Yes         | No         | No           |
-| ReliableArrangedWithAckReceipt | 7 | Yes   | Yes        | No           |
-
-* **Unreliable:** This Reliability TypeID sends datagrams without any guarantees that they will arrive at the destination. They are not guaranteed to be delivered in any specific order or at all.
-
-* **UnreliableSequenced:** This Reliability TypeID sends datagrams without any guarantees that they will arrive at the destination but ensures that they are delivered in the sequence they were sent.
-
-* **Reliable:** This Reliability TypeID sends datagrams guaranteed to be delivered in the order they were sent. If a datagram is lost, RakNet will retransmit it until it is acknowledged by the receiver.
-
-* **ReliableArranged:** This Reliability TypeID sends datagrams guaranteed to be delivered in the order they were sent. If a datagram is lost, RakNet will not retransmit it and all datagrams before it that have not been acknowledged. 
-
-* **ReliableSequenced:** This Reliability TypeID sends datagrams guaranteed to be delivered in the order they were sent and ensures that they are delivered sequentially.
-
-* **UnreliableWithAckReceipt:** This Reliability TypeID sends datagrams without any guarantees that they will arrive at the destination, but the receiver sends an acknowledgement receipt upon receipt of this datagram.
-
-* **ReliableWithAckReceipt:** This Reliability TypeID sends datagrams guaranteed to be delivered in the order they were sent, and the receiver sends an acknowledgement receipt upon receipt of this datagram.
-
-* **ReliableArrangedWithAckReceipt:** This Reliability TypeID sends datagrams guaranteed to be delivered in the order they were sent but all datagrams before it that have not been acknowledged, and the receiver sends an acknowledgement receipt upon receipt of this datagram.
+| Name | ID  | Is Reliable | Is Arranged | Is Sequenced | Characteristics/Features |
+| ---- | --- | ----------- | ----------- | ------------ | ------------------------ |
+| Unreliable              | 0   | No          | No         | No           | This Reliability TypeID sends datagrams without any guarantees that they will arrive at the destination. They are not guaranteed to be delivered in any specific order or at all |
+| UnreliableSequenced      | 1   | No          | Yes        | Yes          | This Reliability TypeID sends datagrams without any guarantees that they will arrive at the destination but ensures that they are delivered in the sequence they were sent |
+| Reliable                 | 2   | Yes         | No         | No           | This Reliability TypeID sends datagrams guaranteed to be delivered in the order they were sent. If a datagram is lost, RakNet will retransmit it until it is acknowledged by the receiver |
+| ReliableArranged         | 3   | Yes         | Yes        | No           | This Reliability TypeID sends datagrams guaranteed to be delivered in the order they were sent. If a datagram is lost, RakNet will not retransmit it and all datagrams before it that have not been acknowledged |
+| ReliableSequenced        | 4   | Yes         | Yes        | Yes          | This Reliability TypeID sends datagrams guaranteed to be delivered in the order they were sent and ensures that they are delivered sequentially |
+| UnreliableWithAckReceipt | 5   | No          | No         | No           | This Reliability TypeID sends datagrams without any guarantees that they will arrive at the destination, but the receiver sends an acknowledgement receipt upon receipt of this datagram |
+| ReliableWithAckReceipt   | 6   | Yes         | No         | No           | This Reliability TypeID sends datagrams guaranteed to be delivered in the order they were sent, and the receiver sends an acknowledgement receipt upon receipt of this datagram |
+| ReliableArrangedWithAckReceipt | 7 | Yes   | Yes        | No           | This Reliability TypeID sends datagrams guaranteed to be delivered in the order they were sent but all datagrams before it that have not been acknowledged, and the receiver sends an acknowledgement receipt upon receipt of this datagram |
 
 ### Reliability definitions
+
 Here you can find every reliability definition which is used in other places at the documentation.
 
 1. Reliable - This is when the reliability is of any type that is reliable
