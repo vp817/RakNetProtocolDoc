@@ -522,7 +522,7 @@ You can put an id of your choice, like: `UserPacketEnumID` + your id (it must no
 
 For example: `UserPacketEnumID` + 22 = 0x9c
 
-The packet structue recommended:
+A simple packet structue showcasing what the `PacketAggregator` can be:
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
