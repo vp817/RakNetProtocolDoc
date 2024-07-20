@@ -19,6 +19,22 @@ This is the latest RakNet protocol documentation. It includes information on the
 | bit | 1 bit | Write or read the bit inside the buffer after you completed it |
 | float | 4 bytes | IEEE 754 single-precision floating-point number |
 
+## General Constants
+
+You can instantly define those without reading how they were made if you want to make your implemention faster.
+
+| Name | Value |
+| ---- | ----- |
+| MtuSize | 1492 |
+| UdpHeaderSize | 28 |
+| PublicKeySize | 294 |
+| RequstChallengeSize | 64 |
+| RespondingEncryptionKey | 128 |
+| MaxNumberOfLocalAddresses | 10 |
+| IdentityProofSize | 294 |
+| ClientProofSize | 32 |
+| DefaultProtocolVersion | 6 |
+
 ## Packets
 
 ### Packet Identifiers
@@ -496,7 +512,7 @@ Flow Control is a RakNet mechanism used to manage the rate of data transmission 
 Congestion control is a RakNet technique used to prevent network congestion by balancing data transmission rates. Techniques like TCP congestion control, packet dropping, rate limiting, traffic shaping, QoS, and load balancing are used. These techniques ensure reliable data delivery and efficient transmission in RakNet.
 
 ### Segment
-Segmentation in RakNet enhances data delivery by dividing large messages into smaller segments. These segments, with headers indicating position and size, ensure successful reassembly on the receiver's end. By comparing the buffer size to the Maximum Transmission Unit (MTU) size (usually 1400), if the buffer exceeds the MTU, it is split into segments for transmission. This mechanism in RakNet prevents data loss, manages large payloads, and guarantees reliable transmission in networked applications.
+Segmentation in RakNet enhances data delivery by dividing large messages into smaller segments. These segments, with headers indicating position and size, ensure successful reassembly on the receiver's end. By comparing the buffer size to the Maximum Transmission Unit (MTU) size, if the buffer exceeds the MTU, it is split into segments for transmission. This mechanism in RakNet prevents data loss, manages large payloads, and guarantees reliable transmission in networked applications.
 
 ### B
 "B" represents the link capacity or the maximum amount of data that can be transmitted per second over the network link. The link capacity is determined by multiple factors, including the network infrastructure, the network configuration, and the available resources. By using a float value, the network capacity can be represented more accurately and precisely, enabling better utilization of the available resources.
