@@ -117,7 +117,7 @@ You can instantly define those without reading how they were made if you want to
 			- Send a ConnectedPing packet that is unreliable.
 		- Send a DisconnectNotification packet to the server. (if you want to disconnect)
 		- Wait for ConnectedPong.
-     			- Response with ConnectedPing.
+			- Response with ConnectedPing.
 
 ### UnconnectedPing
 
