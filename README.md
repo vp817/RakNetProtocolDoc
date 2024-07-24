@@ -236,6 +236,7 @@ This packet is used to complete the handshake process between a client and a ser
 
 **Calculating ConnectionOutcome**:
 - Get the client address.
+- Use `bitwise and` to check if the checks below is needed using `contains address` and `contains guid` boolean values.
   - If the client is not currently connected or it's address is not found in the list, then the outcome is 1.
   - Otherwise, set it to 2.
 - If the `clientGuid` is already associated with a client that has a different client address, set the connection state to 3.
