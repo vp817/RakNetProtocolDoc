@@ -83,16 +83,14 @@ You can instantly define those without reading how they were made if you want to
    - Handle the datagrams received from the client as required, whether they are AckedDatagrams, NackedDatagrams, require B and AS values, or are segmented packets.
    - After that you will receive inside the datagram received a list of packets that will be sent seperately down you will see them and understand
 		- Wait for an ConnectionRequest packet from the client
-			- Respond with an ConnectionRequestAccepted that is sent in a unreliable and not segmenteed datagram
-		- Wait for an ConnectionRequest packet from the client
-			- Respond with an ConnectionRequestAccepted that is sent in a unreliable and not segmenteed datagram
+			- Respond with an ConnectionRequestAccepted that is reliable.
 		- Wait for an NewIncomingConneciton packet
 			- Check if the server port is the same as the address of the client inside NewIncomingConnection then mark it as connected if so.
-			- Response with a ConnectedPong packet.
+			- Response with a ConnectedPong packet that is unreliable.
 		- Wait for a DisconnectNotification
-			- Resend that packet to nofiy that it is handled that is sent in a unreliable and not segmenteed datagram
+			- Handle it as you want.
 		- Wait for a ConnectedPing
-			- Response with a ConnectedPong.
+			- Response with a ConnectedPong that is unreliable.
 
 #### Client
 
@@ -116,11 +114,10 @@ You can instantly define those without reading how they were made if you want to
 		- Send a ConnectionRequest packet to the server.
 			- Wait for a ConnectionRequestAccepted packet from the server.
 		- Send a NewIncomingConnection packet to the server.
-			- Wait for a ConnectedPong packet from the server to confirm the connection is established.
+			- Send a ConnectedPing packet that is unreliable.
 		- Send a DisconnectNotification packet to the server. (if you want to disconnect)
-			- Wait for the server to receive the packet and if you receive it that means its disconnected now.
-		- Send a ConnectedPing packet to the server.
-			- Wait for a ConnectedPong packet from the server to confirm the connection is still alive.
+		- Wait for ConnectedPong.
+     			- Response with ConnectedPing.
 
 ### UnconnectedPing
 
