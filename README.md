@@ -234,6 +234,18 @@ This packet is used to complete the handshake process between a client and a ser
 
 > Note: if the OpenConnectionReplyOne packet has security but this packet does not contain a challenge, the client should immediately send a RemoteSystemRequiresPublicKey packet to notify the server that there was no challenge in the OpenConnectionRequestTwo packet.
 
+**Calculating ConnectionOutcome**:
+- Get the client address.
+  - If the client is not currently connected or it's address is not found in the list, then the outcome is 1.
+  - Otherwise, set it to 2.
+- If the `clientGuid` is already associated with a client that has a different client address, set the connection state to 3.
+- If the client address is already associated with a different `clientGuid`, set the connection state to 4.
+- Otherwise, set the state to 0.
+
+> Once you have calculated the `ConnectionOutcome`, You will need to check if it is equal to 1 then send the `OpenConnectionReplyTwo` packet.
+
+> If the `ConnectionOutcome` is not 0, send the `AlreadyConnected` packet.
+
 ### OpenConnectionReplyTwo
 
 This packet is the response to an open connection request two packet.
@@ -247,18 +259,6 @@ This packet is the response to an open connection request two packet.
 | mtuSize | uint16 | Big Endian | Maximum transmission unit (MTU) size of the server |
 | requiresEncryption | bit | N/A | Whether the connection requires encryption or not |
 | encryptionKey | uint8[128] | N/A | The encryption key of the client - it is only written or read if the `requiresEncryption` field is set to true. |
-
-**Calculating ConnectionOutcome**:
-- Find the client associated with the provided `clientAddress`.
-  - If the client is not currently connected, set the local variable `state` to 1.
-  - Otherwise, set it to 2.
-- If the `clientGuid` provided in the request is already associated with a client that has a different `clientAddress`, set the connection state to 3.
-- If the `clientAddress` is already associated with a different `clientGuid`, set the connection state to 4, as someone else may have the same internet as the current client trying to connect.
-- Otherwise, set the state to 0.
-
-> Once you have calculated the `ConnectionOutcome`, You will need to check if it is equal to 1 then send the `OpenConnectionReplyTwo` packet.
-
-> If the `ConnectionOutcome` is not 0, send the `AlreadyConnected` packet.
 
 ### ConnectionRequest
 
