@@ -88,7 +88,7 @@ You can instantly define those without reading how they were made if you want to
 			- Respond with an ConnectionRequestAccepted that is sent in a unreliable and not segmenteed datagram
 		- Wait for an NewIncomingConneciton packet
 			- Check if the server port is the same as the address of the client inside NewIncomingConnection then mark it as connected if so.
-			- Response with a ConnectedPing packet.
+			- Response with a ConnectedPong packet.
 		- Wait for a DisconnectNotification
 			- Resend that packet to nofiy that it is handled that is sent in a unreliable and not segmenteed datagram
 		- Wait for a ConnectedPing
@@ -116,7 +116,7 @@ You can instantly define those without reading how they were made if you want to
 		- Send a ConnectionRequest packet to the server.
 			- Wait for a ConnectionRequestAccepted packet from the server.
 		- Send a NewIncomingConnection packet to the server.
-			- Wait for a ConnectedPing packet from the server to confirm the connection is established.
+			- Wait for a ConnectedPong packet from the server to confirm the connection is established.
 		- Send a DisconnectNotification packet to the server. (if you want to disconnect)
 			- Wait for the server to receive the packet and if you receive it that means its disconnected now.
 		- Send a ConnectedPing packet to the server.
