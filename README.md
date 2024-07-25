@@ -34,6 +34,7 @@ You can instantly define those without reading how they were made if you want to
 | IdentityProofSize | 294 |
 | ClientProofSize | 32 |
 | DefaultProtocolVersion | 6 |
+| NumberOfArrangedStreams | 32 |
 
 ## Packets
 
@@ -429,6 +430,37 @@ This packet is used for sending and receiving data between clients and the serve
 | rangeNumber | uint24 | Little Endian | The sequence number of the datagram |
 | capsuleLayers | DatagramCapsuleLayer[] | N/A | Array of capsule layers in the packet |
 
+**Checking for corrupt arrangment channels**:
+(the valid datagram must be `Sequenced And Arranged (No ack receipt))
+
+if `arrangmentChannel` is greater or equals to number of arranged streams available which is 2 ^ 5 then it is correupted(skip and do what is needed).
+
+every valid datagram arrangement type of an array max value is the number of arranged streams and must not be greater.
+
+**Finding hole count in received datagrams**:
+(the valid datagram must be `Reliable or in sequence` before proceeding further)
+
+you will need to check hole count in valid datagrams that is `Reliable or in sequence` and the reason is to check for their order and it serves as a check if there was some kind of missing valid datagram received or wrong `rangeNumber` was used in sending or whatever else reason.
+
+`receivedPacketsBaseIndex`: it only increments if valid datagram `Reliable or in sequence`
+`receivedPacketQueue`: it is something that stores the `rangeNumber` of valid datagram as the key in the list and it's value is true not the datagram, it can be false but after meeting some coditions that will be stated below (false means that we got it sucessfully and true means we didn't get it sucessfully).
+
+to find the hole count subtract the current received valid datagram's `rangeNumber` with the `receivedPacketsBaseIndex` and that property increments everytime there is no hole count (`receivedPacketsBaseIndex` only increments if `Reliable or in sequence`).
+
+1. if the hole count is 0 then it is a proper valid datagram so you can handle it normally but before that remove it from `receivedPacketQueue` and add (pre-)increment the `receivedPacketsBaseIndex`.
+2. if the hole count is greater than the maximum value of `uint24` divided by 2 then it is a duplicated packet (skip and do what is needed).
+3. if the hole count is smaller than the `receivedPacketQueue` size
+	- if the hole count is an index/key of the `receivedPacketQueue` and is not equals to false then fill the hole by replacing the key of the hole count in `receivedPacketQueue` with a key that it's value is equals to false.
+	- else it is a duplicate packet (skip and do what is needed).
+
+if these conditions stated up was not met then:
+
+1. if the hole count is greater than 1000000 then the hole count is too high (skip and do what is needed).
+2. if hole count(with `bitwise and` the `uint32` max value if needed) is greater than the `receivedPacketQueue` size then fill it with hole count as the length with a key that is equals to the last key summed by 1 that has a value of true.
+3. after condition(2) was done then add an element with it's key as the last key summed by 1 that has a value of false.
+
+after that you can create a loop and check if `receivedPacketQueue` size is greater than 0 and first value of `receivedPacketQueue` is false then increment the `receivedPacketsBaseIndex`.
+
 ### DatagramCapsuleLayer
 
 This structure represents a capsule layer in a ValidDatagram.
@@ -487,6 +519,7 @@ Here you can find every reliability definition which is used in other places at 
 1. Reliable - This is when the reliability is of any type that is reliable
 2. Sequenced - This is when the reliability is both unreliable sequenced and reliable sequenced
 3. Sequenced and arranged - This is when the reliability is `Sequenced` and reliable arranged and reliable arranged with ack recepit
+4. Reliable or in sequence - This is when the reliability is reliable or reliable sequenced or reliable arranged
 
 ### Retransmission
 RakNet uses selective repeat retransmission to ensure reliable delivery of datagrams. When a datagram is sent, it is assigned a sequence number. If a datagram is not acknowledged within a certain timeout period, RakNet will retransmit the datagram using the same sequence number. When the receiver receives a duplicate datagram with the same sequence number, it can discard it, since it has already acknowledged that sequence number.
