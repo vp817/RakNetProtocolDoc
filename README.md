@@ -448,7 +448,7 @@ you will need to check hole count in valid datagrams that is `Reliable or in seq
 
 to find the hole count subtract the current received valid datagram's `rangeNumber` with the `receivedPacketsBaseIndex` and that property increments everytime there is no hole count (`receivedPacketsBaseIndex` only increments if `Reliable or in sequence`).
 
-1. if the hole count is 0 then it is a proper valid datagram so you can handle it normally but before that remove it from `receivedPacketQueue` and add (pre-)increment the `receivedPacketsBaseIndex`.
+1. if the hole count is 0 then it is a proper valid datagram so you can handle it normally but before that remove it from `receivedPacketQueue` if it server and add (pre-)increment the `receivedPacketsBaseIndex`.
 2. if the hole count is greater than the maximum value of `uint24` divided by 2 then it is a duplicated packet (skip and do what is needed).
 3. if the hole count is smaller than the `receivedPacketQueue` size
 	- if the hole count is an index/key of the `receivedPacketQueue` and is not equals to false then fill the hole by replacing the key of the hole count in `receivedPacketQueue` with a key that it's value is equals to false.
