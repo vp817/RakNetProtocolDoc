@@ -443,6 +443,7 @@ every valid datagram arrangement type of an array max value is the number of arr
 you will need to check hole count in valid datagrams that is `Reliable or in sequence` and the reason is to check for their order and it serves as a check if there was some kind of missing valid datagram received or wrong `rangeNumber` was used in sending or whatever else reason.
 
 `receivedPacketsBaseIndex`: it only increments if valid datagram `Reliable or in sequence`
+
 `receivedPacketQueue`: it is something that stores the `rangeNumber` of valid datagram as the key in the list and it's value is true not the datagram, it can be false but after meeting some coditions that will be stated below (false means that we got it sucessfully and true means we didn't get it sucessfully).
 
 to find the hole count subtract the current received valid datagram's `rangeNumber` with the `receivedPacketsBaseIndex` and that property increments everytime there is no hole count (`receivedPacketsBaseIndex` only increments if `Reliable or in sequence`).
