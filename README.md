@@ -609,7 +609,7 @@ if the check fails then the `end offset` will be the `bytes to send`
 
 after that split it with the `start offset` and `end offset` then you can do the feilds in the capsule.
 
-the segment id will be called what you want, for example `sender last segment id`, that will increment outside the loop every time.
+the segment id will be the `sender last segment id` property that will increment outside the loop every time.
 
 ## Resources
 Here are a list of resources to help you better understand the RakNet protocol:
