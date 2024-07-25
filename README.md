@@ -583,7 +583,31 @@ A simple packet structue showcasing what the `PacketAggregator` can be:
 After that you will send it in the valid datagram capsule/s buffer
 
 ### Sending a Non-RakNet Packet
-To send a non-RakNet packet, first determine if segmentation is needed by comparing if the buffer size is greater than the MTU size minus 2, plus 3, plus 4 times 1 (for the datagram's data header byte length), and subtracting 11 if security is in use. Then, subtract the given value with the capsule size. If segmentation is necessary, reassemble the packet before adding it to the datagram queue for transmission. If no segmentation is required, add it directly to the queue. Remember, segmented packets must not be unreliable; if they are, convert them to reliable packets to guarantee successful and ordered delivery of all packet parts.
+To send a non-RakNet packet, first determine if segmentation is needed by comparing if the capsule buffer size is greater than the MTU size minus 2, plus 3, plus 4 times 1 (for the datagram's data header byte length), and subtracting 11 if security is in use. Then, subtract the given value with the capsule size. If segmentation is necessary, segemnt the capsule's stream before adding it to the datagram queue for transmission. If no segmentation is required, add it directly to the queue. Remember, segmented packets must not be unreliable; if they are, convert them to reliable packets to guarantee successful and ordered delivery of all packet parts.
+
+The way to segment it into parts:
+
+get the capsule size and also the capsule buffer size then the size that you used to check if is greater than the capsule buffer size and define them.
+
+to get the count of how many segments is needed to be made: subtract the current buffer size with 1 then divide it with the size that you used to check if is greater than the capsule buffer size then sum them with 1 (not two times)
+
+then define a `current segment index` outside the loop and is 0 by default
+
+then do a loop that will use the count of how many segments then the segmentation process will start:
+
+after that define a variable representing `start offset` and it is equals to `current segment index` multiplied by the size that you used to check if is greater than the capsule buffer size
+
+after that define a variable representing `bytes to send` that is equals to capsule buffer size subtracted by `start offset`
+
+check if `bytes to send` is greater than the size that you used to check if is greater than the capsule buffer size
+
+after that create a new variable representing the `end offset`
+
+check if the `bytes to send` is not the size that you used to check if is greater than the capsule buffer size then set the `end offset` to the capsule buffer size subtracted by the `current segment index` multiplied by the size that you used to check if is greater than the capsule buffer size
+
+if the check fails then the `end offset` will be the `bytes to send`
+
+after that split it with the `start offset` and `end offset` then you can do the feilds in the capsule.
 
 ## Resources
 Here are a list of resources to help you better understand the RakNet protocol:
