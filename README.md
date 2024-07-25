@@ -435,7 +435,7 @@ This packet is used for sending and receiving data between clients and the serve
 
 if `arrangmentChannel` is greater or equals to number of arranged streams available which is 2 ^ 5 then it is correupted(skip and do what is needed).
 
-every valid datagram arrangement type of an array max value is the number of arranged streams and must not be greater.
+every valid datagram arrangement type of an array max value is the number of arranged streams and must not be greater or equals to.
 
 **Finding hole count in received datagrams**:
 (the valid datagram must be `Reliable or in sequence` before proceeding further)
