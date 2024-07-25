@@ -589,7 +589,7 @@ The way to segment it into parts:
 
 get the capsule size and also the capsule buffer size then the size that you used to check if is greater than the capsule buffer size and define them.
 
-to get the count of how many segments is needed to be made: subtract the current buffer size with 1 then divide it with the size that you used to check if is greater than the capsule buffer size then sum them with 1 (not two times)
+to get the count of how many segments is needed to be made: subtract the capsule buffer size with 1 then divide it with the size that you used to check if is greater than the capsule buffer size then sum them with 1 (not two times)
 
 then define a `current segment index` outside the loop and is 0 by default
 
