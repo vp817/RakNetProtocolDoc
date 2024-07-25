@@ -609,6 +609,8 @@ if the check fails then the `end offset` will be the `bytes to send`
 
 after that slice the capsule buffer with the `start offset` and `end offset` then you can do the feilds in the capsule.
 
+you will need an array that has the capsules that contains the segments that will then be sent in queue.
+
 the segment id will be the `sender last segment id` property that will increment outside the loop every time.
 
 ## Resources
