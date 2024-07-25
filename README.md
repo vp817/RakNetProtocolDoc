@@ -583,7 +583,7 @@ A simple packet structue showcasing what the `PacketAggregator` can be:
 After that you will send it in the valid datagram capsule/s buffer
 
 ### Sending a Non-RakNet Packet
-To send a non-RakNet packet, first determine if segmentation is needed by comparing the buffer size to the MTU size minus 2, plus 3, plus 4 times 1 (for the datagram's data header byte length), and subtracting 11 if security is in use. Then, subtract the given value with the capsule size. If segmentation is necessary, reassemble the packet before adding it to the datagram queue for transmission. If no segmentation is required, add it directly to the queue. Remember, segmented packets must not be unreliable; if they are, convert them to reliable packets to guarantee successful and ordered delivery of all packet parts.
+To send a non-RakNet packet, first determine if segmentation is needed by comparing if the buffer size is greater than the MTU size minus 2, plus 3, plus 4 times 1 (for the datagram's data header byte length), and subtracting 11 if security is in use. Then, subtract the given value with the capsule size. If segmentation is necessary, reassemble the packet before adding it to the datagram queue for transmission. If no segmentation is required, add it directly to the queue. Remember, segmented packets must not be unreliable; if they are, convert them to reliable packets to guarantee successful and ordered delivery of all packet parts.
 
 ## Resources
 Here are a list of resources to help you better understand the RakNet protocol:
