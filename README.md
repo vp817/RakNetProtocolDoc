@@ -599,7 +599,7 @@ after that define a variable representing `start offset` and it is equals to `cu
 
 after that define a variable representing `bytes to send` that is equals to capsule buffer size subtracted by `start offset`
 
-check if `bytes to send` is greater than the size that you used to check if is greater than the capsule buffer size
+check if `bytes to send` is greater than the size that you used to check if is greater than the capsule buffer size and if true return the size that you used to check...
 
 after that create a new variable representing the `end offset`
 
