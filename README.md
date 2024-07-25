@@ -607,7 +607,7 @@ check if the `bytes to send` is not the size that you used to check if is greate
 
 if the check fails then the `end offset` will be the `bytes to send`
 
-after that split it with the `start offset` and `end offset` then you can do the feilds in the capsule.
+after that slice the capsule buffer with the `start offset` and `end offset` then you can do the feilds in the capsule.
 
 the segment id will be the `sender last segment id` property that will increment outside the loop every time.
 
