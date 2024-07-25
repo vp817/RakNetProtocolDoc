@@ -428,7 +428,7 @@ This packet is used for sending and receiving data between clients and the serve
 | isContinuousSend | bit | N/A | If true, the packet is a continuous send packet |
 | requiresBAndAS | bit | N/A | If true, the packet includes B and AS values |
 | rangeNumber | uint24 | Little Endian | The sequence number of the datagram |
-| capsuleLayers | DatagramCapsuleLayer[] | N/A | Array of capsule layers in the packet |
+| capsules | DatagramCapsule[] | N/A | Array of capsules in the packet |
 
 **Checking for corrupt arrangment channels**:
 (the valid datagram must be `Sequenced And Arranged (No ack receipt))
@@ -463,9 +463,9 @@ after that you can create a loop and check if `receivedPacketQueue` size is grea
 
 after that you can handle the valid datagrams normally.
 
-### DatagramCapsuleLayer
+### DatagramCapsule
 
-This structure represents a capsule layer in a ValidDatagram.
+This structure represents a capsule in a ValidDatagram.
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
@@ -553,8 +553,8 @@ Segmentation in RakNet enhances data delivery by dividing large messages into sm
 ### AS
 "AS" represents the data arrival rate, which is the rate at which the data is generated and sent by the sender. The use of a float value allows for more precise representation of the arrival rate, which can vary based on the application requirements and the network conditions. By comparing the arrival rate with the link capacity, the sender can determine the amount of data that can be sent over the network link without causing congestion or degradation of performance.
 
-### CapsuleLayer Size
-To determine the size of the capsule layer, you can follow these steps:
+### Capsule Size
+To determine the size of the capsule, you can follow these steps:
 1. Increment the byte by 1 step to represent the reliability.
 2. Increment the byte by 2 steps to accommodate the size of the buffer.
 3. If the reliability is any type of reliable, increment the byte by 3 steps to represent the `reliableCapsuleIndex`.
