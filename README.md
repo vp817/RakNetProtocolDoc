@@ -459,7 +459,9 @@ if these conditions stated up was not met then:
 2. if hole count(with `bitwise and` the `uint32` max value if needed) is greater than the `receivedPacketQueue` size then fill it with hole count as the length with a key that is equals to the last key summed by 1 that has a value of true.
 3. after condition(2) was done then add an element with it's key as the last key summed by 1 that has a value of false.
 
-after that you can create a loop and check if `receivedPacketQueue` size is greater than 0 and first value of `receivedPacketQueue` is false then increment the `receivedPacketsBaseIndex`.
+after that you can create a loop and check if `receivedPacketQueue` size is greater than 0 and first value of `receivedPacketQueue` is false then increment the `receivedPacketsBaseIndex` and remove the last element of the `receivedPacketQueue` repeatedly.
+
+after that you can handle the valid datagrams normally.
 
 ### DatagramCapsuleLayer
 
