@@ -444,7 +444,7 @@ you will need to check hole count in valid datagrams that is `Reliable or in seq
 
 `receivedPacketsBaseIndex`: it only increments if valid datagram `Reliable or in sequence`
 
-`receivedPacketQueue`: it is something that stores the `rangeNumber` of valid datagram as the key in the list and it's value is true not the datagram, it can be false but after meeting some coditions that will be stated below (false means that we got it sucessfully and true means we didn't get it sucessfully) and it it's data structure is a ![Queue](https://gist.github.com/vp817/f20f0d2b16b9fb5d7dfa6364928e0e9d).
+`receivedPacketQueue`: it is something that stores the `rangeNumber` of valid datagram as the key in the list and it's value is true not the datagram, it can be false but after meeting some coditions that will be stated below (false means that we got it sucessfully and true means we didn't get it sucessfully) and it it's data structure is a ![Queue](https://gist.github.com/vp817/da0ea3b104ede9ccb570a1ba96863d86).
 
 to find the hole count subtract the current received valid datagram's `rangeNumber` with the `receivedPacketsBaseIndex` and that property increments everytime there is no hole count (`receivedPacketsBaseIndex` only increments if `Reliable or in sequence`).
 
