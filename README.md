@@ -2,6 +2,10 @@
 
 This is the latest RakNet protocol documentation. It includes information on the data types used in the protocol and details about each packet and their associated fields.
 
+
+TODO: will be modified after some time to make it better for the eye and a lot of useless stuff will be removed
+
+
 ## Data Types
 
 | Type | Size | Note |
