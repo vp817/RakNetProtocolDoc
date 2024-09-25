@@ -130,7 +130,7 @@ This packet is used to determine if a server is online or not. It also include i
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
-| onlyReplyOnOpenConnections | bool | N/A | If set to true, the server will only send a reply if the client's connection to the server is currently open. This helps to prevent sending responses to clients that have closed their connections. This is especially useful in peer-to-peer networks where clients may come and go frequently. By setting this field to true, the client can avoid wasting network resources by only sending requests when it knows that the server will be able to respond. The resulting message ID for the request would be `UnconnectedPingOpenConnections`. If set to false, the default behavior is `UnconnectedPing`. |
+| onlyReplyOnOpenConnections | bool | N/A | If set to true, the server will only send a reply if the client's connection to the server is currently open. This helps to prevent sending responses to clients that have closed their connections. By setting this field to true, the client can avoid wasting network resources by only sending requests when it knows that the server will be able to respond. The resulting message ID for the request would be `UnconnectedPingOpenConnections`. If set to false, the default behavior is `UnconnectedPing`. |
 | id | uint8 | N/A | Unique identifier of the packet |
 | clientSendTime | uint64 | Big Endian | Client timestamp used to calculate the latency |
 | magic | uint8[16] | N/A | Magic sequence to identify the packet |
