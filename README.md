@@ -2,9 +2,10 @@
 
 This is the latest RakNet protocol documentation. It includes information on the data types used in the protocol and details about each packet and their associated fields.
 
+TODO: modify to make it better for the eye and remove a lot of useless stuff.
+And also organize things, such as enums/constants in 1 place, and also remove repeated things.
 
-TODO: will be modified after some time to make it better for the eye and a lot of useless stuff will be removed
-
+This documentation assumes you want similar/same security method to libcat, that's why if the server you're targeting doesn't have libcat or whatever same as that, but they also have security enabled, the client will crash because they will only give you a cookie, no identity proof or anything of the likes.
 
 ## Data Types
 
@@ -16,7 +17,7 @@ TODO: will be modified after some time to make it better for the eye and a lot o
 | uint32 | 4 bytes | Unsigned 32-bit integer |
 | uint64 | 4/8 bytes | Unsigned 64-bit integer (4 bytes for 32-bit systems, 8 bytes for 64-bit systems) |
 | uint16-string | variable | UTF-8 encoded string with a length of 2 bytes preceding the string |
-| magic | 16 bytes | An array of unsigned 8-bit integers with a specific sequence and it is `[0x00, 0xFF, 0xFF, 0x00, 0xFE, 0xFE, 0xFE, 0xFE, 0xFD, 0xFD, 0xFD, 0xFD, 0x12, 0x34, 0x56, 0x78]` |
+| magic | 16 bytes | An array of unsigned 8-bit integers with a specific sequence `[0x00, 0xFF, 0xFF, 0x00, 0xFE, 0xFE, 0xFE, 0xFE, 0xFD, 0xFD, 0xFD, 0xFD, 0x12, 0x34, 0x56, 0x78]` |
 | pad-with-zero | variable | Null bytes used for padding with a size of your choice |
 | bool | 1 byte | Write or read as a single unsigned 8-bit integer, with a value of 0 or 1 (Zero is used to represent false, and One is used to represent true) |
 | address | 7-29 bytes | IPv4: 1 byte (address version), 4 bytes (IP address), 2 bytes (port), IPv6: 1 byte (address version), unsigned short for address family (in little-endian), unsigned short for port number, unsigned integer for flow info, 16 bytes for the address, an unsigned integer for the scope ID. |
@@ -57,13 +58,13 @@ You can instantly define those without reading how they were made if you want to
 | OpenConnectionReplyTwo | 0x08 | OFFLINE |
 | ConnectionRequest | 0x09 | ONLINE [from/to datagram] |
 | RemoteSystemRequiresPublicKey | 0x0a | OFFLINE |
-| OurSystemRequiresSecurity | 0x0b | BOTH [????] |
+| OurSystemRequiresSecurity | 0x0b | BOTH [?] |
 | ConnectionAttemptFailed | 0x11 | OFFLINE |
 | AlreadyConnected | 0x12 | OFFLINE |
 | ConnectionRequestAccepted | 0x10 | ONLINE [from/to datagram] |
 | NewIncomingConnection | 0x13 | ONLINE [from/to datagram] |
 | DisconnectionNotification | 0x15 | ONLINE |
-| ConnectionLost | 0x16 | BOTH |
+| ConnectionLost | 0x16 | BOTH [?] |
 | IncompatibleProtocolVersion | 0x19 | ONLINE |
 
 ### RakNet Protocol Packet Send and Receive Sequence
@@ -126,11 +127,11 @@ You can instantly define those without reading how they were made if you want to
 
 ### UnconnectedPing
 
-This packet is used to determine if a server is online or not. It also include information about open connections.
+This packet is used to determine if a server is online or not.
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
-| onlyReplyOnOpenConnections | bool | N/A | If set to true, the server will only send a reply if the client's connection to the server is currently open. This helps to prevent sending responses to clients that have closed their connections. By setting this field to true, the client can avoid wasting network resources by only sending requests when it knows that the server will be able to respond. The resulting message ID for the request would be `UnconnectedPingOpenConnections`. If set to false, the default behavior is `UnconnectedPing`. |
+| onlyReplyOnOpenConnections | bool | N/A | If set to true, the server will only send a reply if the client's connection to the server is currently open. This helps to prevent sending responses to clients that have closed their connections. The resulting message ID for the request would be `UnconnectedPingOpenConnections`. If set to false, then the identifier won't need to be change. |
 | id | uint8 | N/A | Unique identifier of the packet |
 | clientSendTime | uint64 | Big Endian | Client timestamp used to calculate the latency |
 | magic | uint8[16] | N/A | Magic sequence to identify the packet |
@@ -178,7 +179,7 @@ This packet is used to initiate the handshake process between a client and a ser
 | protocolVersion | uint8 | N/A | Protocol version supported by the client |
 | mtuSize | pad-with-zero | N/A | Maximum transmission unit (MTU) size of the client |
 
-> When using pad-with-zero, Add to the MTU size the current reading position plus 28 (UDP header size) for reading. For writing, Get the MTU size subtracted with the current buffer writing position (or its size) plus 28 (UDP header size) plus the current buffer size. To validate the packet buffer, check if its size is 28(udp header size) pluys the current buffer size.
+> When using pad-with-zero, Add to the MTU size the current reading position plus 28 (UDP header size) for reading. For writing, Get the MTU size subtracted with the current buffer writing position (or its size) plus 28 (UDP header size) plus the current buffer size. To validate the packet buffer, check if its size is 28(udp header size) plus the current buffer size.
 
 ### OpenConnectionReplyOne
 
@@ -448,7 +449,7 @@ you will need to check hole count in valid datagrams that is `Reliable or in seq
 
 `receivedPacketsBaseIndex`: it only increments if valid datagram `Reliable or in sequence`
 
-`receivedPacketQueue`: it is something that stores the `rangeNumber` of valid datagram as the key in the list and it's value is true not the datagram, it can be false but after meeting some coditions that will be stated below (false means that we got it sucessfully and true means we didn't get it sucessfully) and it it's data structure is a ![Queue](https://gist.github.com/vp817/da0ea3b104ede9ccb570a1ba96863d86).
+`receivedPacketQueue`: it is something that stores the `rangeNumber` of valid datagram as the key in the list and it's value is true not the datagram, it can be false but after meeting some coditions that will be stated below (false means that we got it sucessfully and true means we didn't get it sucessfully) and it it's data structure is a `DS_Queue`(Check original raknet for the impl).
 
 to find the hole count subtract the current received valid datagram's `rangeNumber` with the `receivedPacketsBaseIndex` and that property increments everytime there is no hole count (`receivedPacketsBaseIndex` only increments if `Reliable or in sequence`).
 
@@ -547,7 +548,6 @@ RakNet uses a reassembly mechanism to reconstruct segmented datagrams that may b
 Flow Control is a RakNet mechanism used to manage the rate of data transmission between sender and receiver. It ensures that the receiver can handle the incoming data at a pace it can process, preventing overwhelming or overflowing the receiver's buffer. Flow control helps maintain a balance between the sender's transmission speed and the receiver's processing capability, optimizing the overall efficiency and stability of the communication.
 
 ### Congestion Manager
-
 congestion manager holds congestion control, checking for skipped range numbers to send nacks, and many other things
 
 TODO: add the spec
