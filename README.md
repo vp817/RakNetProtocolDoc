@@ -5,7 +5,7 @@ This is the latest RakNet protocol documentation. It includes information on the
 TODO: modify to make it better for the eye and remove a lot of useless stuff.
 And also organize things, such as enums/constants in 1 place, and also remove repeated things.
 
-This documentation assumes you want similar/same security method to libcat, that's why if the server you're targeting doesn't have libcat or whatever same as that, but they also have security enabled, the client will crash because they will only give you a cookie, no identity proof or anything of the likes.
+This documentation assumes you want similar/same security method of libcat, that's why if the server you're targeting doesn't have libcat or whatever same as that, but they also have security enabled, the client will crash because they will only give you a cookie, no identity proof or anything of the likes.
 
 ## Data Types
 
