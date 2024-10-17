@@ -1,14 +1,6 @@
 # RakNet Protocol Documentation
 
-This is the latest RakNet protocol documentation. It includes information on the data types used in the protocol and details about each packet and their associated fields.
-
-## Contributing
-
-You can contribute by making this look/be better or fix a typo or maybe add more things that isn't added here.
-
-And you can also do the todos.
-
-## DOC-START
+This is the latest RakNet protocol documentation. It includes information on the data types used in the protocol and details about each packet and other things.
 
 ```mermaid
 graph TD;
