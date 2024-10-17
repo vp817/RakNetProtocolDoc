@@ -2,33 +2,94 @@
 
 This is the latest RakNet protocol documentation. It includes information on the data types used in the protocol and details about each packet and their associated fields.
 
-TODO: modify to make it better for the eye and remove a lot of useless stuff.
-And also organize things, such as enums/constants in 1 place, and also remove repeated things.
-
-This documentation assumes you want similar/same security method of libcat, that's why if the server you're targeting doesn't have libcat or whatever same as that, but they also have security enabled, the client will crash because they will only give you a cookie, no identity proof or anything of the likes.
-
 ## Contributing
 
 You can contribute by making this look/be better or fix a typo or maybe add more things that isn't added here.
 
 And you can also do the todos.
 
-## Data Types
+## DOC-START
 
-| Type | Size | Note |
-| ---- | ---- | ---- |
-| uint8 | 1 byte | Unsigned 8-bit integer |
-| uint16 | 2 bytes | Unsigned 16-bit integer |
-| uint24 | 3 bytes | Unsigned 24-bit integer with a minimum value of 0 and a maximum value of 16777215 |
-| uint32 | 4 bytes | Unsigned 32-bit integer |
-| uint64 | 4/8 bytes | Unsigned 64-bit integer (4 bytes for 32-bit systems, 8 bytes for 64-bit systems) |
-| uint16-string | variable | UTF-8 encoded string with a length of 2 bytes preceding the string |
-| magic | 16 bytes | An array of unsigned 8-bit integers with a specific sequence `[0x00, 0xFF, 0xFF, 0x00, 0xFE, 0xFE, 0xFE, 0xFE, 0xFD, 0xFD, 0xFD, 0xFD, 0x12, 0x34, 0x56, 0x78]` |
-| pad-with-zero | variable | Null bytes used for padding with a size of your choice |
-| bool | 1 byte | Write or read as a single unsigned 8-bit integer, with a value of 0 or 1 (Zero is used to represent false, and One is used to represent true) |
-| address | 7-29 bytes | IPv4: 1 byte (address version), 4 bytes (IP address), 2 bytes (port), IPv6: 1 byte (address version), unsigned short for address family (in little-endian), unsigned short for port number, unsigned integer for flow info, 16 bytes for the address, an unsigned integer for the scope ID. |
-| bit | 1 bit | Write or read the bit inside the buffer after you completed it |
-| float | 4 bytes | IEEE 754 single-precision floating-point number |
+```mermaid
+graph TD;
+  nt1[First char of data type];
+  nt1-->cond1[Contains u];
+  cond1-->test1[It is unsigned data type];
+  nt1-->cond2[Contains s];
+  cond2-->test2[It is signed data type];
+```
+
+```mermaid
+graph TD;
+  dts[Data Types];
+  dts-->BYTE;
+  BYTE-->BITS-->chr1[8];
+  dts-->WORD;
+  WORD-->BITS-->chr2[16];
+  dts-->TBYTE;
+  TBYTE-->BITS-->chr3[24];
+  dts-->DWORD;
+  DWORD-->BITS-->chr4[32];
+  dts-->QWORD;
+  QWORD-->BITS-->chr5[64];
+  dts-->STRING;
+  STRING-->sb1[Length data type];
+  sb1-->UWORD;
+  dts-->MAGIC;
+  MAGIC-->tmp2[Purpose];
+  tmp2-->tmp3[To recognise unconnected packets];
+  MAGIC-->msq[Bytes];
+  msq-->SIZE-->chr6[16];
+  msq--->tmp1[0x00, 0xFF, 0xFF, 0x00, 0xFE, 0xFE, 0xFE, 0xFE, 0xFD, 0xFD, 0xFD, 0xFD, 0x12, 0x34, 0x56, 0x78];
+  dts-->PADDING;
+  PADDING-->nt1[Note];
+  nt1-->tmp5[This is always 0 in raknet];
+  dts-->BOOL;
+  BOOL-->tmp11[Written as data type];
+  tmp11-->tmp12[UBYTE];
+  tmp11-->tmp13[Condition];
+  tmp13-->tmp14[FALSE];
+  tmp14-->tmp15[0];
+  tmp13-->tmp16[TRUE];
+  tmp16-->tmp17[1];
+  dts-->ADDRESS;
+  ADDRESS-->tmp7[version];
+  tmp7-->tmp8[UBYTE];
+  tmp7-->tmp6[If 4];
+  tmp6-->tmp9[name];
+  tmp9-->tmp10[UBYTE<4>];
+  tmp6-->tmp19[port];
+  tmp19-->tmp20[UWORD];
+  tmp20-->tmp21[Endianness];
+  tmp21-->tmp22[Big];
+  tmp7-->tmp23[If 6];
+  tmp23-->tmp24[family];
+  tmp24-->tmp25[UWORD];
+  tmp25-->tmp26[Endianness];
+  tmp26-->tmp27[Little];
+  tmp23-->tmp28[port];
+  tmp28-->tmp29[UWORD];
+  tmp29-->tmp26;
+  tmp26-->tmp31[Big];
+  tmp23-->tmp32[flow info];
+  tmp32-->tmp33[UDWORD];
+  tmp33-->tmp26;
+  tmp26-->tmp35[Big];
+  tmp23-->tmp36[name];
+  tmp36-->tmp37[UBYTE<16>];
+  tmp37-->tmp26;
+  tmp26-->tmp42[None];
+  tmp23-->tmp38[scope id];
+  tmp38-->tmp39[UDWORD];
+  tmp39-->tmp26;
+  tmp26-->tmp41[Big];
+  dts-->BIT;
+  BIT-->nt3[Note];
+  nt3-->tmp49[A bit of a position from a byte];
+  dts-->FLOAT;
+  FLOAT-->tmp44[UDWORD];
+  tmp44-->tmp43[IEEE 754 single-precision floating-point number];
+```
 
 ## General Constants
 
