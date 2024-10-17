@@ -684,6 +684,6 @@ the segment id will be the `sender last segment id` property that will increment
 
 ## Resources
 
-- <a href="https://github.com/facebookarchive/RakNet">Original RakNet</a>: Contains information on packets, other things.
+- <a href="https://github.com/facebookarchive/RakNet">Original RakNet</a>: Contains information on packets and other things.
 - <a href="https://datatracker.ietf.org/doc/html/rfc793">RFC-793</a>: Provides information about reliability, retransmission, packet reassembly, packet segmentation and flow control.
 - <a href="https://datatracker.ietf.org/doc/html/rfc5681">RFC-5681</a>: Provides information about congestion control.
