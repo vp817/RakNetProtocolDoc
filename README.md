@@ -683,9 +683,7 @@ you will need an array that has the capsules that contains the segments that wil
 the segment id will be the `sender last segment id` property that will increment outside the loop every time.
 
 ## Resources
-Here are a list of resources to help you better understand the RakNet protocol:
 
-- <a href="https://github.com/facebookarchive/RakNet">Original RakNet</a>: Contains information on packets.
-- <a href="http://www.jenkinssoftware.com/">JenkinsSoftware</a>: The original raknet official website, Some of the information used in this documentation was taken from the website and combined with other sources to create a comprehensive guide.
+- <a href="https://github.com/facebookarchive/RakNet">Original RakNet</a>: Contains information on packets, other things.
 - <a href="https://datatracker.ietf.org/doc/html/rfc793">RFC-793</a>: Provides information about reliability, retransmission, packet reassembly, packet segmentation and flow control.
 - <a href="https://datatracker.ietf.org/doc/html/rfc5681">RFC-5681</a>: Provides information about congestion control.
