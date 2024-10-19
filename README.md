@@ -15,7 +15,7 @@ And you can also do the todos.
 
 ## Implementions
 
-RakNet implementions made using this protocol.
+RakNet implementions made using this documentation.
 
 | programming language | url |
 | -------------------- | --- |
