@@ -5,17 +5,7 @@ This is the latest RakNet protocol documentation. It includes information on the
 TODO: modify to make it better for the eye and remove a lot of useless stuff.
 And also organize things, such as enums/constants in 1 place, and also remove repeated things.
 
-<!--
-This documentation assumes you want similar/same security method of libcat, that's why if the server you're targeting doesn't have libcat or whatever same as that, but they also have security enabled, the client will crash because they will only give you a cookie, no identity proof or anything of the likes.
-
-## Implementions
-
-RakNet implementions made using this documentation.
-
-| programming language | url |
-| -------------------- | --- |
-| php | https://github.com/Palethia/RakNet |
--->
+This documentation assumes you want similar/same security method of libcat, that's why if the server you're targeting doesn't have libcat or whatever same as that, but they also have security enabled, the client will crash because they will only give you a cookie, no identity proof or anything of the likes. but you can pull request for supporting both cases.
 
 ## Data Types
 
@@ -246,6 +236,8 @@ This packet is used to complete the handshake process between a client and a ser
 | clientGuid | uint64 | Big Endian | Unique identifier for the client |
 
 > Note: if the OpenConnectionReplyOne packet has security but this packet does not contain a challenge, the client should immediately send a RemoteSystemRequiresPublicKey packet to notify the server that there was no challenge in the OpenConnectionRequestTwo packet.
+
+You can write your own way of calculating the connection outcome but this below is the standard way.
 
 **Calculating ConnectionOutcome**:
 - Get the client address.
@@ -558,9 +550,9 @@ RakNet uses a reassembly mechanism to reconstruct segmented datagrams that may b
 Flow Control is a RakNet mechanism used to manage the rate of data transmission between sender and receiver. It ensures that the receiver can handle the incoming data at a pace it can process, preventing overwhelming or overflowing the receiver's buffer. Flow control helps maintain a balance between the sender's transmission speed and the receiver's processing capability, optimizing the overall efficiency and stability of the communication.
 
 ### Congestion Manager
-congestion manager holds congestion control, checking for skipped range numbers to send nacks, and many other things
+congestion manager holds congestion control, checking for skipped range numbers to send nacks, and other things.
 
-TODO: add the spec
+TODO: add the doc
 
 ### Congestion Control
 Congestion control is a RakNet technique used to prevent network congestion by balancing data transmission rates. Techniques like TCP congestion control, packet dropping, rate limiting, traffic shaping, QoS, and load balancing are used. These techniques ensure reliable data delivery and efficient transmission in RakNet.
@@ -588,7 +580,7 @@ The UserPacketEnum ID is `0x86`, which marks the beginning of where you can star
 
 What is recommended is to create a `PacketAggregator` considering you have a completed implementation then send and receive it.
 
-You can put an id of your choice, like: `UserPacketEnumID` + your id (it must not make the `UserPacketEnumID` surpass the `uint8 limit` (0xff))
+You can put an id of your choice, like: `UserPacketEnumID` + your own id (it must not make the `UserPacketEnumID` surpass the `uint8 limit`)
 
 For example: `UserPacketEnumID` + 22 = 0x9c
 
@@ -636,7 +628,6 @@ the segment id will be the `sender last segment id` property that will increment
 ## Resources
 Here are a list of resources to help you better understand the RakNet protocol:
 
-- <a href="https://github.com/facebookarchive/RakNet">Original RakNet</a>: Contains information on packets.
-- <a href="http://www.jenkinssoftware.com/">JenkinsSoftware</a>: The original raknet official website, Some of the information used in this documentation was taken from the website and combined with other sources to create a comprehensive guide.
+- <a href="https://github.com/facebookarchive/RakNet">Original RakNet</a>: Contains information on packets and all else.
 - <a href="https://datatracker.ietf.org/doc/html/rfc793">RFC-793</a>: Provides information about reliability, retransmission, packet reassembly, packet segmentation and flow control.
 - <a href="https://datatracker.ietf.org/doc/html/rfc5681">RFC-5681</a>: Provides information about congestion control.
