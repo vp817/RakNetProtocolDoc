@@ -133,9 +133,9 @@ This packet is used to determine if a server is online or not.
 | ----- | ---- | ----------| ----- |
 | onlyReplyOnOpenConnections | bool | N/A | If set to true, the server will only send a reply if the client's connection to the server is currently open. This helps to prevent sending responses to clients that have closed their connections. The resulting message ID for the request would be `UnconnectedPingOpenConnections`. If set to false, then the identifier won't need to be change. |
 | id | uint8 | N/A | Unique identifier of the packet |
-| clientSendTime | uint64 | Big Endian | Client timestamp used to calculate the latency |
+| clientSendTime | uint64 | Big Endian | Client timestamp that can be used to calculate the latency |
 | magic | uint8[16] | N/A | Magic sequence to identify the packet |
-| clientGuid | uint64 | Big Endian | Unique identifier for the client |
+| clientGuid | uint64 | Big Endian | Unique identifier of the client |
 
 ### UnconnectedPong
 
@@ -144,10 +144,12 @@ This packet is the response to an unconnected ping packet.
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
 | id | uint8 | N/A | Unique identifier of the packet |
-| serverSendTime | uint64 | Big Endian | Server timestamp used to calculate the latency |
-| serverGuid | uint64 | Big Endian | Unique identifier for the server |
+| serverSendTime | uint64 | Big Endian | Server timestamp that can be used to calculate the latency |
+| serverGuid | uint64 | Big Endian | Unique identifier of the server |
 | magic | uint8[16] | N/A | Magic sequence to identify the packet |
-| responseData | uint16-string | Big Endian | Response data typically used for server information |
+| message | uint16-string | Big Endian | Response data typically used for server information |
+
+> You can call the `message` whatever you want. For example you can call it `data` instead
 
 ### ConnectedPing
 
@@ -156,7 +158,7 @@ This packet is used to keep the connection alive between the client and the serv
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
 | id | uint8 | N/A | Unique identifier of the packet |
-| clientSendTime | uint64 | Big Endian | Client timestamp used to calculate the latency |
+| clientSendTime | uint64 | Big Endian | Client timestamp that can be used to calculate the latency |
 
 ### ConnectedPong
 
@@ -166,7 +168,7 @@ This packet is the response to a connected ping packet.
 | ----- | ---- | ----------| ----- |
 | id | uint8 | N/A | Unique identifier of the packet |
 | clientSendTime | uint64 | Big Endian | Client timestamp from the ping |
-| serverSendTime | uint64 | Big Endian | Server timestamp used to calculate the latency |
+| serverSendTime | uint64 | Big Endian | Server timestamp that can be used to calculate the latency |
 
 ### OpenConnectionRequestOne
 
@@ -218,11 +220,9 @@ This packet is used to complete the handshake process between a client and a ser
 | magic | uint8[16] | N/A | Magic sequence to identify the packet |
 | serverAddress | uint8[7-29] | N/A | Server IP address and port combo |
 | mtuSize | uint16 | Big Endian | Maximum transmission unit (MTU) size of the client |
-| clientGuid | uint64 | Big Endian | Unique identifier for the client |
+| clientGuid | uint64 | Big Endian | Unique identifier of the client |
 
 ### OpenConnectionRequestTwo If OpenConnectionReplyOne has security
-
-This packet is used to complete the handshake process between a client and a server.
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
@@ -233,7 +233,7 @@ This packet is used to complete the handshake process between a client and a ser
 | challenge | uint8[64] | N/A | The system handshake challenge bytes |
 | serverAddress | uint8[7-29] | N/A | Server IP address and port combo |
 | mtuSize | uint16 | Big Endian | Maximum transmission unit (MTU) size of the client |
-| clientGuid | uint64 | Big Endian | Unique identifier for the client |
+| clientGuid | uint64 | Big Endian | Unique identifier of the client |
 
 > Note: if the OpenConnectionReplyOne packet has security but this packet does not contain a challenge, the client should immediately send a RemoteSystemRequiresPublicKey packet to notify the server that there was no challenge in the OpenConnectionRequestTwo packet.
 
@@ -260,7 +260,7 @@ This packet is the response to an open connection request two packet.
 | ----- | ---- | ----------| ----- |
 | id | uint8 | N/A | Unique identifier of the packet |
 | magic | uint8[16] | N/A | Magic sequence to identify the packet |
-| serverGuid | uint64 | Big Endian | Unique identifier for the server |
+| serverGuid | uint64 | Big Endian | Unique identifier of the server |
 | clientAddress | uint8[7-29] | N/A | Client IP address and port combo |
 | mtuSize | uint16 | Big Endian | Maximum transmission unit (MTU) size of the server |
 | requiresEncryption | bit | N/A | Whether the connection requires encryption or not |
@@ -273,7 +273,7 @@ This packet is used to establish a connection between a client and a server with
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
 | id | uint8 | N/A | Unique identifier of the packet |
-| clientGuid | uint64 | Big Endian | Unique identifier for the client |
+| clientGuid | uint64 | Big Endian | Unique identifier of the client |
 | clientSendTime | uint64 | Big Endian | Timestamp of the client when it requested to be connected |
 | doSecurity | bool | N/A | Whether the connection requires security or not |
 | clientProof | uint8[32] | N/A | Proof of client authentication |
@@ -307,7 +307,7 @@ This packet is sent when the server does not require security but it is still ma
 | ----- | ---- | ----------| ----- |
 | id | uint8 | N/A | Unique identifier of the packet |
 | clientAddress | uint8[7-29] | N/A | Client IP address and port combo |
-| serverGuid | uint64 | Big Endian | Unique identifier for the server |
+| serverGuid | uint64 | Big Endian | Unique identifier of the server |
 
 ### ConnectionAttemptFailed
 
@@ -325,34 +325,34 @@ This packet is sent when the client is already connected.
 | ----- | ---- | ----------| ----- |
 | id | uint8 | N/A | Unique identifier of the packet |
 | magic | uint8[16] | N/A | Magic sequence to identify the packet |
-| clientGuid | uint64 | Big Endian | Unique identifier for the client |
+| clientGuid | uint64 | Big Endian | Unique identifier of the client |
 
 ### ConnectionRequestAccepted
 
-This packet is the response to a connection request with security enabled.
+This packet is the response to a connection request.
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
 | id | uint8 | N/A | Unique identifier of the packet |
 | clientAddress | uint8[7-29] | N/A | Client IP address and port combo |
-| clientIndex | uint16 | Big Endian | Unique identifier assigned to the client |
-| serverMachineAddresses | address[10] | N/A | Server local machine addresses |
-| clientSendTime | uint64 | Big Endian | Timestamp for the client |
-| serverSendTime | uint64 | Big Endian | Timestamp for the server |
+| clientIndex | uint16 | Big Endian | Unique identifier of the client |
+| serverNetAddresses | address[10] | N/A | Server local network addresses |
+| clientSendTime | uint64 | Big Endian | Timestamp of the client |
+| serverSendTime | uint64 | Big Endian | Timestamp of the server |
 
 ### NewIncomingConnection
 
-This packet is sent to all other clients when a new client connects to the server.
+This packet is sent from the client to the server .
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
 | id | uint8 | N/A | Unique identifier of the packet |
 | serverAddress | uint8[7-29] | N/A | Server IP address and port combo |
 | clientMachineAddresses | address[10] | N/A | Client local machine addresses |
-| clientSendTime | uint64 | Big Endian | Timestamp for the client |
-| serverSendTime | uint64 | Big Endian | Timestamp for the server |
+| clientSendTime | uint64 | Big Endian | Timestamp of the client |
+| serverSendTime | uint64 | Big Endian | Timestamp of the server |
 
-After you send or receive this packet to the server, you need to keep the connection alive by sending periodic `ConnectedPing` packets. These packets are essentially a way to say "hey, I'm still here and connected to the server." The server also sends `ConnectedPong` packets back in response to confirm that the connection is still active. This ping-pong process helps prevent the connection from timing out due to inactivity or network issues.
+Send the `ConnectedPing` packet or `ConnectedPong` packet depending on the side of the action.
 
 ### DisconnectionNotification
 
@@ -364,12 +364,10 @@ This packet is sent when a client disconnects from the server.
 
 ### ConnectionLost
 
-This packet is sent when a connection to a client is lost.
-
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
 | id | uint8 | N/A | Unique identifier of the packet |
-| clientGuid | uint64 | Big Endian | Unique identifier for the client |
+| clientGuid | uint64 | Big Endian | Unique identifier of the client |
 | clientAddress | uint8[7-29] | N/A | Client IP address and port combo |
 
 ### IncompatibleProtocolVersion
@@ -381,11 +379,11 @@ This packet is sent when a client attempts to connect to a server with an incomp
 | id | uint8 | N/A | Unique identifier of the packet |
 | protocolVersion | uint8 | N/A | Protocol version supported by the server |
 | magic | uint8[16] | N/A | Magic sequence to identify the packet |
-| serverGuid | uint64 | Big Endian | Unique identifier for the server |
+| serverGuid | uint64 | Big Endian | Unique identifier of the server |
 
 ### Datagram
 
-This packet is used for sending and receiving data between clients and the server. It can be one of three types: ValidDatagram, AckedDatagram, or NackedDatagram.
+This packet is used for sending and receiving data between clients and the server after connecting which happens after the end of the handshake. It can be one of three types: ValidDatagram, AckedDatagram, or NackedDatagram.
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
@@ -437,6 +435,8 @@ This packet is used for sending and receiving data between clients and the serve
 | rangeNumber | uint24 | Little Endian | The sequence number of the datagram |
 | capsules | DatagramCapsule[] | N/A | Array of capsules in the packet |
 
+You don't need to care about `isPacketPair`, `requiresBAndAS` and `isContinuousSend` unless you want a complete datagram packet implemention.
+
 **Checking for corrupt arrangment channels**:
 (the valid datagram must be `Sequenced And Arranged (No ack receipt))
 
@@ -444,32 +444,25 @@ if `arrangmentChannel` is greater or equals to number of arranged streams availa
 
 every valid datagram arrangement type of an array max value is the number of arranged streams and must not be greater or equals to.
 
-**Finding hole count in received datagrams**:
+**Finding hole count in received reliable datagrams**:
 (the valid datagram must be `Reliable or in sequence` before proceeding further)
 
 you will need to check hole count in valid datagrams that is `Reliable or in sequence` and the reason is to check for their order and it serves as a check if there was some kind of missing valid datagram received or wrong `rangeNumber` was used in sending or whatever else reason.
 
-`receivedPacketsBaseIndex`: it only increments if valid datagram `Reliable or in sequence`
+to find the hole count subtract the current received valid datagram's `rangeNumber` with the `receivedPacketsBaseIndex`.
 
-`receivedPacketQueue`: it is something that stores the `rangeNumber` of valid datagram as the key in the list and it's value is true not the datagram, it can be false but after meeting some coditions that will be stated below (false means that we got it sucessfully and true means we didn't get it sucessfully) and it it's data structure is a `DS_Queue`(Check original raknet for the impl).
+You will need to do an array with it's max as 2048 or 0xf4240 and save the hole count as the key and true as value.
+You can write it anyway you want but i'm writing the way i did it.
 
-to find the hole count subtract the current received valid datagram's `rangeNumber` with the `receivedPacketsBaseIndex` and that property increments everytime there is no hole count (`receivedPacketsBaseIndex` only increments if `Reliable or in sequence`).
+**Steps**:
 
-1. if the hole count is 0 then it is a proper valid datagram so you can handle it normally but before that remove it from `receivedPacketQueue` if it exists and add (pre-)increment the `receivedPacketsBaseIndex`.
-2. if the hole count is greater than the maximum value of `uint24` that is `bitwise right shifted` by 1 then it is a duplicated packet (skip and do what is needed).
-3. if the hole count is smaller than the `receivedPacketQueue` size
-	- if the hole count is an index/key of the `receivedPacketQueue` and is not equals to false then fill the hole by replacing the key of the hole count in `receivedPacketQueue` with a key that it's value is equals to false.
-	- else it is a duplicate packet (skip and do what is needed).
+1. if the hole count is 0 then it is a proper valid datagram so you can handle it normally (and what is done inside was already said).
+2. if the hole count `bitwise AND` the maximum value of `uint24` that is `bitwise right shifted` by 1 is smaller than the array and also it exists in the array that the hole count was saved in then it is a duplicated packet (skip and do what is needed).
+3. if the hole count is greater than the array size then it is.
 
-if these conditions stated up was not met then:
+Loop through each element while dropping it and increment the reliable base index each time until the array is emptied.
 
-1. if the hole count is greater than 1000000 then the hole count is too high (skip and do what is needed).
-2. if hole count(with `bitwise and` the `uint32` max value if needed) is greater than the `receivedPacketQueue` size then fill it by pushing true values in queue.
-3. after condition(2) was done then push false to queue.
-
-after that you can create a loop and check if `receivedPacketQueue` size is greater than 0 and first value of `receivedPacketQueue` is false then remove the last element of the `receivedPacketQueue` then increment the `receivedPacketsBaseIndex`.
-
-after that you can handle the valid datagrams normally.
+after that you can handle the valid datagrams normally(handle the arrangment before that).
 
 ### DatagramCapsule
 
@@ -493,7 +486,7 @@ This structure represents the arrangement of a capsule in a ValidDatagram.
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
 | arrangedCapsuleIndex | uint24 | Little Endian | Index of the arranged capsule |
-| arrangementChannel | uint8 | N/A | Channel used for the arrangement |
+| arrangementChannel | uint8 | N/A | The arrangement channel |
 
 ### CapsuleSegment
 
@@ -538,38 +531,27 @@ RakNet uses selective repeat retransmission to ensure reliable delivery of datag
 The AckQueue and NackQueue are used to keep track of which datagrams have been acknowledged and which have not. The AckQueue stores a list of datagram sequence numbers that have been successfully acknowledged, while the NackQueue stores a list of datagram sequence numbers that have not been acknowledged and need to be retransmitted. When a datagram is received with a sequence number that has already been acknowledged, it can be discarded.
 
 ### PacketPair
-PacketPair is a technique used by RakNet to improve the efficiency of datagram retransmissions. When a datagram is acknowledged, RakNet sends the next datagram in the sequence as well. This allows the receiver to begin processing the next datagram immediately, reducing latency and improving throughput.
+PacketPair is used to improve the efficiency of datagram retransmissions. When a datagram is acknowledged, RakNet sends the next datagram in the sequence as well. This allows the receiver to begin processing the next datagram immediately, reducing latency and improving throughput.
 
 ### ContinuousSend
-ContinuousSend is a feature of RakNet that allows datagrams to be sent continuously without waiting for acknowledgement. This can improve performance in some cases, but can also lead to packet loss and retransmissions, since the sender does not wait for feedback before sending the next datagram.
+ContinuousSend allows datagrams to be sent continuously without waiting for acknowledgement. This can improve performance in some cases, but can also lead to packet loss and retransmissions, since the sender does not wait for acknowledgement before sending the next datagram.
 
 ### Reassembly
-RakNet uses a reassembly mechanism to reconstruct segmented datagrams that may be received out of order. When a datagram is segmented, each segment is assigned a unique identifier. When the receiver receives a segment, it is buffered until all segments with the same identifier have been received. Once all segments have been received, they are reassembled into the original datagram.
+Mechanism to reconstruct segmented datagrams. When a datagram is segmented, each segment is assigned a unique identifier. When the receiver receives a segment, it is buffered until all segments with the same identifier have been received(maximum number is `uint16` limit and if reached set the value back to zerk). Once all segments have been received, they are reassembled into the original datagram.
 
 ### Flow Control
-Flow Control is a RakNet mechanism used to manage the rate of data transmission between sender and receiver. It ensures that the receiver can handle the incoming data at a pace it can process, preventing overwhelming or overflowing the receiver's buffer. Flow control helps maintain a balance between the sender's transmission speed and the receiver's processing capability, optimizing the overall efficiency and stability of the communication.
-
-### Congestion Manager
-congestion manager holds congestion control, checking for skipped range numbers to send nacks, and other things.
-
-TODO: add the doc
+Mechanism used to manage the rate of data transmission between sender and receiver. It ensures that the receiver can handle the incoming data at a pace it can process, preventing overwhelming or overflowing the receiver's buffer. Flow control helps maintain a balance between the sender's transmission speed and the receiver's processing capability, optimizing the overall efficiency and stability of the communication.
 
 ### Congestion Control
-Congestion control is a RakNet technique used to prevent network congestion by balancing data transmission rates. Techniques like TCP congestion control, packet dropping, rate limiting, traffic shaping, QoS, and load balancing are used. These techniques ensure reliable data delivery and efficient transmission in RakNet.
+Congestion control is used to prevent network congestion by balancing data transmission rates. Techniques like TCP congestion control, packet dropping, rate limiting, traffic shaping, QoS, and load balancing are used. These techniques ensure reliable data delivery and efficient transmission in RakNet.
 
 ### Segment
-Segmentation in RakNet enhances data delivery by dividing large messages into smaller segments. These segments, with headers indicating position and size, ensure successful reassembly on the receiver's end. By comparing the buffer size to the Maximum Transmission Unit (MTU) size, if the buffer exceeds the MTU, it is split into segments for transmission. This mechanism in RakNet prevents data loss, manages large payloads, and guarantees reliable transmission in networked applications.
-
-### B
-"B" represents the link capacity or the maximum amount of data that can be transmitted per second over the network link. The link capacity is determined by multiple factors, including the network infrastructure, the network configuration, and the available resources. By using a float value, the network capacity can be represented more accurately and precisely, enabling better utilization of the available resources.
-
-### AS
-"AS" represents the data arrival rate, which is the rate at which the data is generated and sent by the sender. The use of a float value allows for more precise representation of the arrival rate, which can vary based on the application requirements and the network conditions. By comparing the arrival rate with the link capacity, the sender can determine the amount of data that can be sent over the network link without causing congestion or degradation of performance.
+Segmentation is used in RakNet to ensure data delivery if exceeds the number required by dividing large messages into smaller segments. These segments, with headers indicating position and size to ensure successful reassembly on the receiver's end if done correctly. This mechanism prevents data loss, manages large payloads, and guarantees reliable transmission in networked applications.
 
 ### Capsule Size
 To determine the size of the capsule, you can follow these steps:
 1. Increment the byte by 1 step to represent the reliability.
-2. Increment the byte by 2 steps to accommodate the size of the buffer.
+2. Increment the byte by 2 steps to represent the size of the buffer.
 3. If the reliability is any type of reliable, increment the byte by 3 steps to represent the `reliableCapsuleIndex`.
 4. If the reliability is sequenced, increment the byte by 3 steps to represent the `sequencedCapsuleIndex`.
 5. If the reliability is sequenced and arranged increment the byte by 3 steps for the `arrangedCapsuleIndex`, and then by 1 step for the `arrangementChannel`.
@@ -583,16 +565,6 @@ What is recommended is to create a `PacketAggregator` considering you have a com
 You can put an id of your choice, like: `UserPacketEnumID` + your own id (it must not make the `UserPacketEnumID` surpass the `uint8 limit`)
 
 For example: `UserPacketEnumID` + 22 = 0x9c
-
-A simple packet structue showcasing what the `PacketAggregator` can be:
-
-| Field | Type | Endianness | Note |
-| ----- | ---- | ----------| ----- |
-| id | uint8 | N/A | Unique identifier of the packet |
-| compressionAlgorithm | uint8 | The compression algorithm [Can be none, openssl, zlib, gzip, snappy, anything] |
-| streams | buffer[] | An array of packet streams (Each element in the streams array represents a packet buffer which is encoded/and is to be decoded in the `compressionAlgorithm`) |
-
-After that you will send it in the valid datagram capsule/s buffer
 
 ### Sending a Non-RakNet Packet
 To send a non-RakNet packet, first determine if segmentation is needed by comparing if the capsule buffer size is greater than the MTU size minus 2, plus 3, plus 4 times 1 (for the datagram's data header byte length), and subtracting 11 if security is in use. Then, subtract the given value with the capsule size. If segmentation is necessary, segemnt the capsule's stream before adding it to the datagram queue for transmission. If no segmentation is required, add it directly to the queue. Remember, segmented packets must not be unreliable; if they are, convert them to reliable packets to guarantee successful and ordered delivery of all packet parts.
@@ -628,6 +600,4 @@ the segment id will be the `sender last segment id` property that will increment
 ## Resources
 Here are a list of resources to help you better understand the RakNet protocol:
 
-- <a href="https://github.com/facebookarchive/RakNet">Original RakNet</a>: Contains information on packets and all else.
-- <a href="https://datatracker.ietf.org/doc/html/rfc793">RFC-793</a>: Provides information about reliability, retransmission, packet reassembly, packet segmentation and flow control.
-- <a href="https://datatracker.ietf.org/doc/html/rfc5681">RFC-5681</a>: Provides information about congestion control.
+- <a href="https://github.com/facebookarchive/RakNet">Original RakNet</a>: Contains information on packets and all else but you will need to read and understand the code.
