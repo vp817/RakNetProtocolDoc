@@ -437,6 +437,8 @@ This packet is used for sending and receiving data between clients and the serve
 
 You don't need to care about `isPacketPair`, `requiresBAndAS` and `isContinuousSend` unless you want a complete datagram packet implemention.
 
+If you care then the `isContinuousSend` is always true.
+
 **Finding `skipped ranges count` for the valid datagram to check if there was some packets missing**:
 
 Firstly check if the current datagram `range number` is not equals to the `expected range number` which is 0 by default.
