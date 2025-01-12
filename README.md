@@ -437,6 +437,18 @@ This packet is used for sending and receiving data between clients and the serve
 
 You don't need to care about `isPacketPair`, `requiresBAndAS` and `isContinuousSend` unless you want a complete datagram packet implemention.
 
+**Finding `skipped ranges count` for the valid datagram to check if there was some packets missing**:
+
+Firstly check if the current datagram `range number` is not equals to the `expected range number` which is 0 by default.
+
+Then subtract `range number` by `expected range number` and if it is greater than `0x3e8` and force the `skipped range count` to be `0x3e8` if so. But before forcing it check if the value is greater than `0xc350` and if so then it's `nat related`.
+
+After that the `expected range number` shall be the current `range number` plus 1.
+
+For a simpler implemention you don't need to add those checks that was previously written.
+
+Do your nack related things and checks then loop through the count in the reverse order and insert each index into the nack queue to be sent later.
+
 **Checking for corrupt arrangment channels**:
 (the valid datagram must be `Sequenced And Arranged (No ack receipt))
 
