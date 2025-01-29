@@ -427,7 +427,7 @@ This structure is used to represent the ranges of AckedDatagrams and the missing
 You need a list of ranges which i previously mentioned as `ranges` which is the rangelist.
 the range list contains the nodes which is the min index and max index for each datagram range number that needs to be inserted.
 
-when inserting you should reduce the amount of nodes there is that is why min and max exists
+when inserting you should reduce the amount of nodes there is that is why min and max exists.
 
 for example lets say you have an array of min and max nodes(where you must insert them as single since you won't be touching them manually):
 `[
@@ -442,7 +442,7 @@ for example lets say you have an array of min and max nodes(where you must inser
 <min: 10, max: 10>
 ]`
 
-It shall turn into what is below(by your code):
+It shall turn into what is below(by your code and remember they must always be sorted):
 `[
 <min: 0, max: 0>
 <min: 2, max: 3>
