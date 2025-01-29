@@ -348,7 +348,7 @@ This packet is sent from the client to the server .
 | ----- | ---- | ----------| ----- |
 | id | uint8 | N/A | Unique identifier of the packet |
 | serverAddress | uint8[7-29] | N/A | Server IP address and port combo |
-| clientMachineAddresses | address[10] | N/A | Client local machine addresses |
+| clientNetAddresses | address[10] | N/A | Client local machine addresses |
 | clientSendTime | uint64 | Big Endian | Timestamp of the client |
 | serverSendTime | uint64 | Big Endian | Timestamp of the server |
 
