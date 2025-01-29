@@ -402,7 +402,7 @@ This packet is a response to a ValidDatagram indicating that the server has rece
 | requiresBAndAS | bit | N/A | If true, the packet includes B and AS values |
 | B | float | Big Endian | Not used |
 | AS | float | Big Endian | Data arrival rate |
-| ranges | Range | N/A | Array of range values that were received |
+| ranges | RangeList | N/A | See `RangeList` - nodes where the range is the acknowledged datagram range numbers |
 
 ### NackedDatagram
 
@@ -410,7 +410,7 @@ This packet is a response to a ValidDatagram indicating that the server has not 
 
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
-| ranges | Range | N/A | Array of range values that were not received |
+| ranges | RangeList | N/A | See `RangeList` - nodes where range is the non-acknowledged datagram range numbers |
 
 ### Range
 
@@ -422,6 +422,35 @@ This structure is used to represent the ranges of AckedDatagrams and the missing
 | isSingle | bool | N/A | If min is equals to max, then this is set to true |
 | min | uint24 | Little Endian | Minimum value in the range|
 | max | uint24 | Little Endian | Maximum value in the range - Is not wrote if is single |
+
+#### RangeLList
+You need a list of ranges which i previously mentioned as `ranges` which is the rangelist.
+the range list contains the nodes which is the min index and max index for each datagram range number that needs to be inserted.
+
+when inserting you should reduce the amount of nodes there is that is why min and max exists
+
+for example lets say you have an array of min and max nodes(where you must insert them as single since you won't be touching them manually):
+`[
+<min 0, max: 0>
+<min: 2, max: 2>
+<min: 3, max: 3>
+<min: 5, max: 5>
+<min: 6, max: 6>
+<min: 8, max: 8>
+<min: 8, max: 8> - there shouldn't be any repeats anyway but this is an example to show what it should do so it's here
+<min: 8, max: 8>
+<min: 10, max: 10>
+]`
+
+It shall turn into what is below(by your code):
+`[
+<min: 0, max: 0>
+<min: 2, max: 3>
+<min: 5, max: 6>
+<min: 8, max: 8>
+<min: 10, max: 10>
+<
+]`
 
 ### ValidDatagram
 
