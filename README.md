@@ -468,26 +468,43 @@ the range list contains the nodes which is the min index and max index for each 
 when inserting you should reduce the amount of nodes there is that is why min and max exists.
 
 for example lets say you have an array of min and max nodes(where you must insert them as single since you won't be touching them manually):
+
 `[
+
 <min 0, max: 0>
+
 <min: 2, max: 2>
+
 <min: 3, max: 3>
+
 <min: 5, max: 5>
+
 <min: 6, max: 6>
+
 <min: 8, max: 8>
+
 <min: 8, max: 8> - there shouldn't be any repeats anyway but this is an example to show what it should do so it's here
+
 <min: 8, max: 8>
+
 <min: 10, max: 10>
+
 ]`
 
 It shall turn into what is below(by your code and remember they must always be sorted):
+
 `[
+
 <min: 0, max: 0>
+
 <min: 2, max: 3>
+
 <min: 5, max: 6>
+
 <min: 8, max: 8>
+
 <min: 10, max: 10>
-<
+
 ]`
 
 ### ValidDatagram
