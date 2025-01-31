@@ -469,7 +469,8 @@ when inserting you should reduce the amount of nodes there is that is why min an
 
 for example lets say you have an array of min and max nodes(where you must insert them as single since you won't be touching them manually):
 
-`[
+```
+[
 
 <min 0, max: 0>
 
@@ -489,11 +490,13 @@ for example lets say you have an array of min and max nodes(where you must inser
 
 <min: 10, max: 10>
 
-]`
+]
+```
 
 It shall turn into what is below(by your code and remember they must always be sorted):
 
-`[
+```
+[
 
 <min: 0, max: 0>
 
@@ -505,7 +508,8 @@ It shall turn into what is below(by your code and remember they must always be s
 
 <min: 10, max: 10>
 
-]`
+]
+```
 
 ### ValidDatagram
 
