@@ -471,25 +471,15 @@ for example lets say you have an array of min and max nodes(where you must inser
 
 ```
 [
-
 <min 0, max: 0>
-
 <min: 2, max: 2>
-
 <min: 3, max: 3>
-
 <min: 5, max: 5>
-
 <min: 6, max: 6>
-
 <min: 8, max: 8>
-
 <min: 8, max: 8> - there shouldn't be any repeats anyway but this is an example to show what it should do so it's here
-
 <min: 8, max: 8>
-
 <min: 10, max: 10>
-
 ]
 ```
 
@@ -497,17 +487,11 @@ It shall turn into what is below(by your code and remember they must always be s
 
 ```
 [
-
 <min: 0, max: 0>
-
 <min: 2, max: 3>
-
 <min: 5, max: 6>
-
 <min: 8, max: 8>
-
 <min: 10, max: 10>
-
 ]
 ```
 
