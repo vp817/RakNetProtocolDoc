@@ -41,44 +41,6 @@ You can instantly define those without reading how they were made if you want to
 | DefaultProtocolVersion | 6 |
 | NumberOfArrangedStreams | 32 |
 
-## Minecraft
-
-If you are here expecting this to be for minecraft then you're at the wrong place(but not now).
-
-Only a few things are different in the protocol as far as i know(see below to know what to change in here)
-
-The `MtuSize` would be 1400(but it changes depending on the network used by the client connecting to the server but you won't need to care about it as you will use that mtu for the client)
-
-The `MaxNumberOfLocalAddresses` would be 20.
-
-The `DefaultProtocolVersion` would be 11.
-
-The `message` field inside UnconnectedPong would contain the server motd or whatever you call it and each part of info is separated by `;`.
-
-The first part would be the edition where `MCPE` would be for the default minecraft edition and `MCEE` for education edition.
-
-The second part would be the first line of the motd which can be anything.
-
-The third part would be the game protocol version(not raknet).
-
-The fourth part would be the current minecraft version(can also be * if you're doing some multiversion thing - optional).
-
-The fifth part would be the number of online players.
-
-The sixth part would be the number of maximum players(it's important since that's what the client will actually use to determine whether to join or not).
-
-The seventh part would be the unqiue id of the server(can be the server guid).
-
-The eighth part would be the world name.
-
-The ninth part would be the the string version of the world gamemode.
-
-The tenth part would be the numeric version of the world gamemode(optional).
-
-The eleventh part would be the ipv4 server port(optional).
-
-The twelfth part would be the ipv6 server port(optional).
-
 ## Packets
 
 ### Packet Identifiers
@@ -103,7 +65,7 @@ The twelfth part would be the ipv6 server port(optional).
 | NewIncomingConnection | 0x13 | ONLINE [from/to datagram] |
 | DisconnectionNotification | 0x15 | ONLINE |
 | ConnectionLost | 0x16 | BOTH [?] |
-| IncompatibleProtocolVersion | 0x19 | ONLINE |
+| IncompatibleProtocolVersion | 0x19 | OFFLINE |
 
 ### RakNet Protocol Packet Send and Receive Sequence
 
