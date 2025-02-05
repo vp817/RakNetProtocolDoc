@@ -1,6 +1,6 @@
 # RakNet Protocol Documentation
 
-This is the latest RakNet protocol documentation. It includes information on the data types used in the protocol and details about each packet and their associated fields.
+This is a raknet protocol documentation. It has everything needed to create a server/client(the default raknet not other types).
 
 TODO: modify to make it better for the eye and remove a lot of useless stuff.
 And also organize things, such as enums/constants in 1 place, and also remove repeated things.
@@ -442,6 +442,10 @@ for example lets say you have an array of min and max nodes(where you must inser
 <min: 8, max: 8> - there shouldn't be any repeats anyway but this is an example to show what it should do so it's here
 <min: 8, max: 8>
 <min: 10, max: 10>
+<min: 12, max: 12>
+<min: 13, max: 13>
+<min: 14, max: 14>
+<min: 15, max: 15>
 ]
 ```
 
@@ -454,6 +458,7 @@ It shall turn into what is below(by your code and remember they must always be s
 <min: 5, max: 6>
 <min: 8, max: 8>
 <min: 10, max: 10>
+<min: 12, max: 15>
 ]
 ```
 
@@ -495,7 +500,7 @@ every valid datagram arrangement type of an array max value is the number of arr
 **Finding hole count in received reliable datagrams**:
 (the valid datagram must be `Reliable or in sequence` before proceeding further)
 
-you will need to check hole count in valid datagrams that is `Reliable or in sequence` and the reason is to check for their order and it serves as a check if there was some kind of missing valid datagram received or wrong `rangeNumber` was used in sending or whatever else reason.
+you will need to check hole count in valid datagrams that is `Reliable or in sequence` and the reason is to check for invalid reliable packet arrangements and so.
 
 to find the hole count subtract the current received valid datagram's `rangeNumber` with the `receivedPacketsBaseIndex`.
 
