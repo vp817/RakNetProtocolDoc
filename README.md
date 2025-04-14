@@ -144,7 +144,7 @@ This packet is the response to an unconnected ping packet.
 | Field | Type | Endianness | Note |
 | ----- | ---- | ----------| ----- |
 | id | uint8 | N/A | Unique identifier of the packet |
-| serverSendTime | uint64 | Big Endian | Server timestamp that can be used to calculate the latency |
+| clientSendTime | uint64 | Big Endian | Client timestamp that can be used to calculate the latency |
 | serverGuid | uint64 | Big Endian | Unique identifier of the server |
 | magic | uint8[16] | N/A | Magic sequence to identify the packet |
 | message | uint16-string | Big Endian | Response data typically used for server information |
