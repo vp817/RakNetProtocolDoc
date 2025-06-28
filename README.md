@@ -363,7 +363,7 @@ Each nann datagram sent is assigned a reliability that specifies how the data sh
 3. Sequenced and ordered - This is when the reliability is `Sequenced` and reliable ordered and reliable ordered with ack recepit
 4. Reliable or in sequence - This is when the reliability is reliable or reliable sequenced or reliable ordered
 
-### Set of things required in your implemention
+#### Set of things required in your implemention
 
 - Retransmission: retransmit a datagram if not acknowledged.
 - Reassembly: reconstruct split packets into a valid normal packet.
