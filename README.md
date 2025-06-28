@@ -390,25 +390,24 @@ Psuedo code:
 global:`expected range number` := 0
 method:`skipped msg count` := 0
 
-loop:
-   if current datagram:`range number` is not equals to global:`expected range number` then
-      method:`skipped msg count` := current datagram:`range number` - global:`expected range number`
-      if method:`skipped msg count` is greater than 1000 then
-         if method:`skipped msg count` is greater than 50000 then
-            # nat related and the check can be removed if not dealing with that
-         end
-         method:`skipped msg count` := 1000
+if current datagram:`range number` is not equals to global:`expected range number` then
+   method:`skipped msg count` := current datagram:`range number` - global:`expected range number`
+   if method:`skipped msg count` is greater than 1000 then
+      if method:`skipped msg count` is greater than 50000 then
+         # nat related and the check can be removed if not dealing with that
       end
+      method:`skipped msg count` := 1000
    end
+end
 
-   function:`insert into ack list/queue`(`range number`: current datagram:`range number`)
-   global:`expected range number` := current datagram:`range number` + 1
+function:`insert into ack list/queue`(`range number`: current datagram:`range number`)
+global:`expected range number` := current datagram:`range number` + 1
 
-   if method:`skipped msg count` is greater than 0 then
-      for tmp:`skipped msg offset` := method:`skipped msg count`; tmp:`skipped msg offset` is greater than 0; tmp:`skipped msg offset` -= 1 then
-         function:`insert into nack list/queue`(`range number`: current datagram:`range number` - tmp:`skipped msg offset`)
-      end
+if method:`skipped msg count` is greater than 0 then
+   for tmp:`skipped msg offset` := method:`skipped msg count`; tmp:`skipped msg offset` is greater than 0; tmp:`skipped msg offset` -= 1 then
+      function:`insert into nack list/queue`(`range number`: current datagram:`range number` - tmp:`skipped msg offset`)
    end
+end
 ```
 
 **Checking for corrupt ordering channels**:
