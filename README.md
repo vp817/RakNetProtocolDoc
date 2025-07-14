@@ -188,7 +188,7 @@ This packet is used to complete the handshake process between a client and a ser
 | Field              | Type             | Endianness | Note |
 | ------------------ | ---------------- | ---------- | ---- |
 | id                 | uint8            | N/A        |      |
-| magic              | uint8[16]{magic} | N/A        |      |
+| magic              | uint8[16]{magic} | N/A        | [Ignored](https://github.com/facebookarchive/RakNet/blob/1a169895a900c9fc4841c556e16514182b75faf8/Source/RakPeer.cpp#L5205) by the original RakNet. |
 | cookie             | uint32           | Big Endian |      |
 | contains challenge | bool             | N/A        | Whether the system requires handshake challenge |
 | challenge          | uint8[64]        | N/A        | The system handshake challenge bytes |
@@ -209,11 +209,12 @@ If it cannot connect then the sent packet would be the `AlreadyConnected` packet
 ### OpenConnectionReply2
 
 This packet is the response to an open connection request two packet.
+[Some old RakNet server implementations](https://github.com/kotyaralih/NostalgiaCore/blob/421b7b26e13643f43e24ee45db0ffef882dabc5b/src/network/raknet/RakNetCodec.php#L20) only encode the port in the address. The original RakNet in release mode [safely ignores](https://github.com/facebookarchive/RakNet/blob/1a169895a900c9fc4841c556e16514182b75faf8/Source/RakPeer.cpp#L4882) most of this packet, but Wireshark and other tools may invalidate it. 
 
 | Field               | Type             | Endianness | Note |
 | ------------------- | ---------------- | ---------- | ---- |
 | id                  | uint8            | N/A        |      |
-| magic               | uint8[16]{magic} | N/A        |      |
+| magic               | uint8[16]{magic} | N/A        | [Ignored](https://github.com/facebookarchive/RakNet/blob/1a169895a900c9fc4841c556e16514182b75faf8/Source/RakPeer.cpp#L4878) by the original RakNet. |
 | server guid         | uint64           | Big Endian |      |
 | client address      | uint8[7-29]      | N/A        |      |
 | mtu size            | uint16           | Big Endian |      |
