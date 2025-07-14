@@ -175,13 +175,13 @@ The `server has security` shall have a global variable that specifies if the ser
 
 This packet is used to complete the handshake process between a client and a server.
 
-| Field          | Type             | Endianness |
-| -------------- | ---------------- | ---------- |
-| id             | uint8            | N/A        |
-| magic          | uint8[16]{magic} | N/A        |
-| server address | uint8[7-29]      | N/A        |
-| mtu size       | uint16           | Big Endian |
-| client guid    | uint64           | Big Endian |
+| Field          | Type             | Endianness | Note |
+| -------------- | ---------------- | ---------- | ---- |
+| id             | uint8            | N/A        |      |
+| magic          | uint8[16]{magic} | N/A        | [Ignored](https://github.com/facebookarchive/RakNet/blob/1a169895a900c9fc4841c556e16514182b75faf8/Source/RakPeer.cpp#L5205) by the original RakNet. |
+| server address | uint8[7-29]      | N/A        |      |
+| mtu size       | uint16           | Big Endian |      |
+| client guid    | uint64           | Big Endian |      |
 
 ### OpenConnectionRequest2 If server has security & libcat
 
