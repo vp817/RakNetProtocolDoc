@@ -175,20 +175,20 @@ The `server has security` shall have a global variable that specifies if the ser
 
 This packet is used to complete the handshake process between a client and a server.
 
-| Field          | Type             | Endianness | Note |
-| -------------- | ---------------- | ---------- | ---- |
-| id             | uint8            | N/A        |      |
-| magic          | uint8[16]{magic} | N/A        | [Ignored](https://github.com/facebookarchive/RakNet/blob/1a169895a900c9fc4841c556e16514182b75faf8/Source/RakPeer.cpp#L5205) by the original RakNet. |
-| server address | uint8[7-29]      | N/A        |      |
-| mtu size       | uint16           | Big Endian |      |
-| client guid    | uint64           | Big Endian |      |
+| Field          | Type             | Endianness |
+| -------------- | ---------------- | ---------- |
+| id             | uint8            | N/A        |
+| magic          | uint8[16]{magic} | N/A        |
+| server address | uint8[7-29]      | N/A        |
+| mtu size       | uint16           | Big Endian |
+| client guid    | uint64           | Big Endian |
 
 ### OpenConnectionRequest2 If server has security & libcat
 
 | Field              | Type             | Endianness | Note |
 | ------------------ | ---------------- | ---------- | ---- |
 | id                 | uint8            | N/A        |      |
-| magic              | uint8[16]{magic} | N/A        | [Ignored](https://github.com/facebookarchive/RakNet/blob/1a169895a900c9fc4841c556e16514182b75faf8/Source/RakPeer.cpp#L5205) by the original RakNet. |
+| magic              | uint8[16]{magic} | N/A        |      |
 | cookie             | uint32           | Big Endian |      |
 | contains challenge | bool             | N/A        | Whether the system requires handshake challenge |
 | challenge          | uint8[64]        | N/A        | The system handshake challenge bytes |
@@ -214,7 +214,7 @@ This packet is the response to an open connection request two packet.
 | Field               | Type             | Endianness | Note |
 | ------------------- | ---------------- | ---------- | ---- |
 | id                  | uint8            | N/A        |      |
-| magic               | uint8[16]{magic} | N/A        | [Ignored](https://github.com/facebookarchive/RakNet/blob/1a169895a900c9fc4841c556e16514182b75faf8/Source/RakPeer.cpp#L4878) by the original RakNet. |
+| magic               | uint8[16]{magic} | N/A        |      |
 | server guid         | uint64           | Big Endian |      |
 | client address      | uint8[7-29]      | N/A        |      |
 | mtu size            | uint16           | Big Endian |      |
