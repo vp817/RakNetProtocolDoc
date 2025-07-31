@@ -7038,8 +7038,7 @@
                <tr>
                   <td>bit</td>
                   <td>1 bit</td>
-                  <td>1/2/3 bits cannot be written inside the buffer if not 8bits which means 1 bit into buffer would be
-                     0b10000000 written as uint8</td>
+                  <td>a bit can be 1 or 0 where it is written as uint8 extended by 0s until 8 bits (bits are written in msb order)</td>
                </tr>
                <tr>
                   <td>float</td>
