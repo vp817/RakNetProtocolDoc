@@ -226,10 +226,10 @@ RequestingConnection: global
 {
    SystemAddress: address;
    RequestsMade;
-   SendConnectionAttemptCount;
+   SendConnectionAttemptCount defaults to 15;
    IsConnecting;
    NextRequestTime;
-   TimeBetweenConnectionAttempts;
+   TimeBetweenConnectionAttempts defaults to 500;
 };
 
 g_RequestedConnections: DynamicArray;
@@ -241,7 +241,7 @@ loop i < g_NumOfRequestedConnections then
    s_timeNow := current time ms;
    if s_rcs->NextRequestTime < s_timeNow then
       s_unsetAddr := s_rcs->SystemAddress is unset;
-      s_tooManyRequests := s_rcs->RequestsMade is s_rcs->SendConnectionAttemptCount+1
+      s_tooManyRequests := s_rcs->RequestsMade is s_rcs->SendConnectionAttemptCount + 1
       if s_unsetAddr or s_tooManyRequests then
          if (s_tooManyRequests and !s_unsetAddr and s_rcs->IsConnecting) then
             // send ConnectionAttemptFailed packet.
