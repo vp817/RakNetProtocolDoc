@@ -31,6 +31,7 @@ Not everything might be correct so you can pull request a fix to them if they re
 **`....1` shall be recorded as:**
 
 #### If version is equals to 4:
+
 | Field   | Type   | Endianness |
 | ------- | ------ | ---------- |
 | address | uint32 | Big Endian |
@@ -45,6 +46,7 @@ converting an ipv4 address into an ipv4 string:
 the value to extract each part into its place in the string from the MSB to the LSB would be ~address.
 
 #### If version is equals to 6:
+
 | Field          | Type      | Endianness    |
 | -------------- | --------- | ------------- |
 | address family | uint16    | Little Endian |
