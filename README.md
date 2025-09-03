@@ -301,7 +301,7 @@ This packet is the response to an open connection request one packet.
 
 **`....1` shall be recorded as:**
 
-#### if ServerHasSecurity & Libcat:
+if ServerHasSecurity & Libcat:
 
 | Field               | Type             | Endianness |
 | ------------------- | ---------------- | ---------- |
@@ -309,7 +309,7 @@ This packet is the response to an open connection request one packet.
 | cookie              | uint32           | Big Endian |
 | server public key   | uint8[294]       | N/A        |
 
-#### if ServerHasSecurity & Nothing:
+if ServerHasSecurity & Nothing:
 
 | Field               | Type             | Endianness |
 | ------------------- | ---------------- | ---------- |
