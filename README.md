@@ -2,7 +2,7 @@
 
 This is a raknet protocol documentation. It has everything needed to create a server/client(the default raknet not other types).
 
-Not everything might be correct so you can pull request a fix to them if they really are wrong or you can create an issue.
+If anything was incorrect or misspelled, you can pull request a fix to them if they really are wrong.
 
 ## DataTypes
 
@@ -116,7 +116,7 @@ Find the "motd" format from somewhere else and apply it as the "UnconnectedPong"
 
 The first packets before a connection(not the socket connection) was craeted(still on unconnected packets) are the packets of the offline type, which means that those are the packets that is handled outside of datagrams(and the opposite holds true).
 
-There is no information on why this and that below but the packet name says all that is needed to be said.
+Below, there is no information on why this and that, but the packet name says all that is needed to be said.
 
 The "Datagrams" to be handled and sent is all possible datagram types, where the `valid dgram` holds the online packets.
 
