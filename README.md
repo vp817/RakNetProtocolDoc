@@ -771,7 +771,7 @@ Firstly, there must be a way to track the congestion control period, where if th
 
 Slow Start is a network traffic control technique that prevents a connection from overloading a network with too much data at once. To achieve that, the connection shall start at a very small speed then increase its speed to the maximum until it finds the network's maximum limit. (However, its not slow at all, because it keeps increasing the packets that is allowed to be sent every time an ack is received). There must be a slow start threshold(which will later be used for retransmission or if a packet was not received by the other side), which will then be used to determine whether it's currently the slow start phase or not, by checking if:
 
-CWND <= SlowStartThreshold || SlowStartThreshold is unset
+CWND <= SlowStartThreshold or SlowStartThreshold is unset
 
 If its currently the slow start phase then the CWND shall be recomputed as:
 
