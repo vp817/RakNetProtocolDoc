@@ -116,7 +116,7 @@ Find the "motd" format from somewhere else and apply it as the "UnconnectedPong"
 | ConnectionLost                 | 0x16 | BOTH    |
 | IncompatibleProtocolVersion    | 0x19 | OFFLINE |
 
-### Offline send and receive sequence
+### Send and receive sequence
 
 The first packets before a connection(not the socket connection) was craeted(still on unconnected packets) are the packets of the offline type, which means that those are the packets that is handled outside of datagrams(and the opposite holds true).
 
