@@ -849,6 +849,8 @@ A sequence number hole/when there are skipped messages is when an ip dgram arriv
 
 The transmission bandwidth and the retransmission bandwidth are both used to know whether the connection shall transmit or retransmit the packets in the retransmission queue, outgoing packet queue. Getting the transmission bandwidth is simple, if UnacknowledgedBytes <= CWND then it is equals to CWND-UnacknowledgedBytes, if not then it shall be set to 0, and the reason for that should be obvious.
 
+The transmission bandwidth is how much should be sent in this update cycle, which can be then used to send an amount of bytes(the internal packet complete size) that is lower than the transmission bandwidth and also the `maximum datagram size excluding header bytes`. (The same applies for retransmission, however instead of using the transmission bandwidth, it would just the retransmission bandwidth but transmission bandwidth also plays a role, because there shouldnt be any retransmissions if no transmissions is possible)
+
 Retransmission only happens for reliable packets. A retransmission queue is a dynamic array with its indexes being a reliable index and with its value being the internal packet, with the index masked by the RETRANSMISSION_QUEUE_MASK(511).
 ``RetransmissionQueue[reliable_index & RETRANSMISSION_QUEUE_MASK] = internal packet``
 
@@ -858,7 +860,7 @@ If there are packets to be retransmitted or if there are anything in the outgoin
 
 If both the retransmission bandwidth and transmission bandwidth is greater than 0 then retransmission is possible. If so, then it is possible to send the packets that are in the retransmission queue.
 
-the complete internal packet size shall be equals to the internal packet message size + the internal packet user buffer size.
+the complete internal packet size shall be equals to the internal packet message size + internal packet user buffer size.
 
 Below is how RakNet sends its datagrams not not overload the other side, but it depends on how the reader wants to implement it after reading and comprehending it.
 
@@ -876,9 +878,9 @@ When an ACK comes and interated through and whatever else happens(like congestio
 
 When a NACK comes and iterated through and whatever else happen and if the sequence number of this iteration exists in the datagram history and if an internal packet of its internal packets is reliable and if it exists in the retransmission queue and if the the next action time is not 0(of the internal packet in the retransmission queue) then it shall be updated to be the time of this update cycle(in microseconds).
 
-### Reliable Window
+### Reliable Receive Window
 
-Reliable window is for received internal packets where it is possible to check if there are duplicates or out of bounds reliable indexes if reliable.
+Reliable receive window is for received internal packets where it is possible to check if there are duplicates or out of bounds reliable indexes if reliable.
 
 if reliable and is not a split internal packet and the reliable index is lower than the reliable window start(0 by default) or greater than the reliable window end(2048 by default), then it is out of range. if it exists in the reliable window array then it is a duplicate internal packet.
 
@@ -887,6 +889,8 @@ If both of what was stated above are true, then the internal packet shall be ign
 if the reliable index start is the same as the reliable index of this reliable index, then it shall be incremented until it is not a value that exists in the reliable window(with the reliable window end also increasing), while also removing from the reliable window the reliable window start value in the iteration.
 
 ### Receiveing Ordering And Sequencing
+
+The order and sequence of an internal packet must be validated before handling it, where if an internal packet is out of order(not really put of order but just like skipped or a future internal packet), it should simply be handled later on. If it is sequenced then if its out of order(the sequencing index is lower than the highest known for this channel) then it shall be dropped and the highest sequencing index shall be updated. (There can only be 32 channels, with each channel having its own thing)
 
 Note: The internal packet must be reliable or sequenced for this section.
 
