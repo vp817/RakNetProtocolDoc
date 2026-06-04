@@ -860,7 +860,7 @@ If there are packets to be retransmitted or if there are anything in the outgoin
 
 If both the retransmission bandwidth and transmission bandwidth is greater than 0 then retransmission is possible. If so, then it is possible to send the packets that are in the retransmission queue.
 
-the complete internal packet size shall be equals to the internal packet message size + internal packet user buffer size.
+the complete internal packet size shall be equals to the internal packet message size + the internal packet user buffer size.
 
 Below is how RakNet sends its datagrams not not overload the other side, but it depends on how the reader wants to implement it after reading and comprehending it.
 
