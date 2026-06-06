@@ -763,7 +763,7 @@ Where d is a smoothing factor between 0 and 1, and it is equals to 0.05 in RakNe
 
 To compute the DeviationRTT/RTTVAR:
 
-Deviation = Deviation + d * (|Difference| - Deviation)
+Deviation = Deviation + d * (abs(Difference) - Deviation)
 
 These values can later be then used if packets are continous sent/bandwidth has exceeded statistic(is is specified above on what this is, outside of congestion management). If bandwidth has exceeded statistics, then everything that is said below shall happen.
 
