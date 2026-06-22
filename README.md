@@ -15,7 +15,7 @@ If anything was incorrect or misspelled, you can pull request a fix to them if t
 | uint24       | 3 bytes    | Unsigned 24-bit integer with a minimum value of 0 and a maximum value of (2^24)-1 |
 | uint32       | 4 bytes    |      |
 | uint64       | 8 bytes    |      |
-| string       | variable   | UTF-8 encoded string preceding with 2 bytes(uint16, little endian) that represents its length |
+| string       | variable   | UTF-8 encoded string usually preceding with 2 bytes(uint16, big endian) that represents its length |
 | magic        | 16 bytes   | A uint8 array with a specific sequence `[0x00, 0xFF, 0xFF, 0x00, 0xFE, 0xFE, 0xFE, 0xFE, 0xFD, 0xFD, 0xFD, 0xFD, 0x12, 0x34, 0x56, 0x78]` that remains unchanged which is used to identify offline/unconnected packets |
 | zero-padding | variable   | A single zero value uint8 recorded in sequence until the required size. |
 | bool         | 1 byte     | Written or read as a single uint8, with a value of 0 or 1 (0 represents false, and 1 represents true). |
