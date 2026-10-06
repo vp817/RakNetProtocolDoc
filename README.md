@@ -70,6 +70,8 @@ The things that changes in "General Constants":
 
 Note: Minecraft does not use libcat encryption(as of now).
 
+The minecraft client's guid is always **negative** when read as a signed 64-bit int, so set the top bit when you generate yours.
+
 Find the "motd" format from somewhere else and apply it as the "UnconnectedPong" `message` field.
 
 > One way is to log it by sending the unconnected ping packet to a bds(bedrock dedicated server) and then logging the `message` field from a bds.
