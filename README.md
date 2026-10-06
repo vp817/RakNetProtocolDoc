@@ -120,7 +120,7 @@ Find the "motd" format from somewhere else and apply it as the "UnconnectedPong"
 | ConnectionLost                 | 0x16 | BOTH    |
 | IncompatibleProtocolVersion    | 0x19 | OFFLINE |
 
-The gaps between the packet ids are just packet ids not documented here(which are unnecessary but may be documented later).
+The gaps between the packet ids are just packets not documented here(which are unnecessary but may be documented later).
 
 ### Send and receive sequence
 
