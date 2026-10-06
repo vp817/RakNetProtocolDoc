@@ -61,6 +61,8 @@ the value would be the uint32 address with all of its bits inverted that is goin
 
 ## Minecraft
 
+> Note: RakNet is no longer used by minecraft as of v26.60. What is used now is NetheNet(Documented in their bedrock-protocol-docs).
+
 This documentation isn't related to minecraft but it's possible to follow it while aiming to implement a minecraft-only raknet.
 
 The things that changes in "General Constants":
@@ -118,9 +120,11 @@ Find the "motd" format from somewhere else and apply it as the "UnconnectedPong"
 | ConnectionLost                 | 0x16 | BOTH    |
 | IncompatibleProtocolVersion    | 0x19 | OFFLINE |
 
+The gaps between the packet ids are just packet ids not documented here(which are unnecessary but may be documented later).
+
 ### Send and receive sequence
 
-The first packets before a connection(not the socket connection) was craeted(still on unconnected packets) are the packets of the offline type, which means that those are the packets that is handled outside of datagrams(and the opposite holds true).
+The first packets before a connection(not the socket connection) was created(still on unconnected packets) are the packets of the offline type, which means that those are the packets that is handled outside of datagrams(and the opposite holds true).
 
 Below, there is no information on why this and that, but the packet name says all that is needed to be said.
 
@@ -147,6 +151,8 @@ Online:
 Before sending the ConnectedPing after handling the NewIncomingConnection packet in raknet port the reader should check if the server port is same as the binding port before connecting (optional).
 
 After every 5 seconds the ConnectedPing is sent to keep the connection alive.
+
+**Timeouts**: A connection that has not received anything for longer than the the timeout is declared lost, and the other side is notified with `ConnectionLost`. The default timeout in 1000(30000 on some platforms)ms. It does not have to be hardcoded. The timeout is also what ends a half connection where the handshake is never completed.
 
 Client <-> Server: user messages after connecting through NewIncomingConnection.
 
@@ -245,9 +251,9 @@ the 576 would be known as the minimum of an ipv4 udp packet and the 1200 may be 
 
 the default mtu size is mtu sizes[number of mtu sizes - 1, with said value being the default index].
 
-the reason why the mtu size is zero padding is because that if size of buffer is more than the currently choosen mtu size it wont be sent, so the client will know that and then change into another mtu size depending on the implemention.
+the reason why the mtu size is zero padding is because that if size of buffer is more than the currently chosen mtu size it wont be sent, so the client will know that and then change into another mtu size depending on the implementation.
 
-Psuedo code through the original raknet way:
+Pseudo code through the original raknet way:
 ```cpp
 RequestingConnection: global
 {
@@ -276,7 +282,7 @@ loop i < g_NumOfRequestedConnections then
          complete_unset s_rcs;
       else
          s_MtuSizeIndex := s_rcs->RequestsMade / (s_rcs->SendConnectionAttemptCount / num of mtu sizes);
-         if s_MtuSizeIndex > num of mtu sizes then
+         if s_MtuSizeIndex >= num of mtu sizes then
             s_MtuSizeIndex = index of default mtu size;
          end
          s_rcs->RequestsMade = s_rcs->RequestsMade + 1;
@@ -292,7 +298,7 @@ loop i < g_NumOfRequestedConnections then
             s_rcs->NextRequestTime = s_timeNow;
          else
             s_SendToEnd := current time ms;
-            if s_SendToStart - s_SendToEnd < 100 then
+            if s_SendToEnd - s_SendToStart < 100 then
                // "drop to the lowest mtu" said in the original.
                s_LowestMtuIndex := s_rcs->SendConnectionAttemptCount / num of mtu sizes * default mtu index;
                if s_LowestMtuIndex > s_rcs->RequestsMade then
@@ -342,7 +348,7 @@ if ServerHasSecurity & Nothing:
 | ------------------- | ---------------- | ---------- |
 | cookie              | uint32           | Big Endian |
 
-The `server has security` shall have a global variable that specifies if the server has security for later usage in the implemention.
+The `server has security` shall have a global variable that specifies if the server has security for later usage in the implementation.
 
 ### OpenConnectionRequest2
 
@@ -371,7 +377,7 @@ If server has security
 
 **Connection outcome**:
 
-If the `client guid` of the client address does not exists in list then you may mark this connection as a new connnection. if both already exists(even if address isn't same but guid is already used or vice versa) then it shall not connect.
+If the `client guid` of the client address does not exists in list then you may mark this connection as a new connection. if both already exists(even if address isn't same but guid is already used or vice versa) then it shall not connect.
 
 If it can connect then the sent packet would be the `OpenConnectionReply2` packet.
 
@@ -522,7 +528,7 @@ This packet is sent when a client attempts to connect to a server with an incomp
 #### 2. Reliability
 1. reliable - the reliability is of any type that is reliable.
 2. sequenced - the reliability is unreliable sequenced or reliable sequenced.
-3. ordered - the reliability is reliable ordered or reliable ordered with ack receipt
+3. ordered - the reliability is reliable ordered or reliable ordered with ack receipt.
 3. sequenced or ordered - the reliability is sequenced or ordered.
 
 ### Reliability
@@ -540,7 +546,9 @@ Each ip dgram sent is assigned a reliability that specifies how the data should 
 | ReliableWithAckReceipt         | 6   | True        | False      | False        |
 | ReliableOrderedWithAckReceipt  | 7   | True        | True       | False        |
 
-### Set of things required in your implemention
+> Note: "Is Ordered" for sequenced reliabilities does not mean they arrive in order, it means they contain an `ordering index` and an `ordering channel` like an ordered one does. A sequenced packet that arrives late is dropped rather than held back.
+
+### Set of things required in your implementation
 
 - Retransmission: retransmit a datagram if not acknowledged.
 - Reassembly: reconstruct split packets into a valid normal packet.
@@ -563,7 +571,7 @@ Every datagram is and must be valid.
 | sequence number    | uint24            | Little Endian |      |
 | packets            | InternalPacket[]  | N/A           | There is no length but internal packets written one after another. |
 
-When the outgoing packet queue has more than 0 packets then `bandwidth has exceeded statistic`; therefore, `is continous send` is set to true.
+When the outgoing packet queue has more than 0 packets then `bandwidth has exceeded statistic`; therefore, `is continuous send` is set to true.
 
 **`....2` shall be recorded as:**
 
@@ -722,7 +730,7 @@ The congestion manager used in raknet by default without any option set is calle
 
 SlidingWindow is some kind of flow control used within various protocols, such as TCP and UDT.
 
-There are multiple phases in SlidingWindow, which are: In flight, 
+SlidingWindow moves between two phases: `slow start` and `congestion avoidance`, where in `slow start`, the congestion window grows by one full mtu on every ack until it reaches the slow start threshold. And in `congestion avoidance` it grows by a fraction of an mtu per congestion control period instead. A retransmission or a nack drops the threshold to half the current window and resets the window back to one mtu, which puts the connection back into `slow start`. Both are described below.
 
 #### Definitions
 - SYN: A static 10000 (10ms in μs) time constant used as a delay threshold used so that the acks can be buffered until necessary.
@@ -753,7 +761,7 @@ RTT = ReceiveTime - SendTime
 
 Where the ReceiveTime is the time when the ACK was received(in microseconds), and the SendTime is the time that the datagram of this sequence number was sent at(in microseconds). This RTT value shall be known as the LastRTT. If the sequence number does not exist in the history then the RTT shall be 0.
 
-There should also be a way to know the expected rtt, the deviation rtt. where the expected rtt is the running averate of rtts, while deviation rtt measures how much those trip times fluctuate. The expected rtt, deviation rtt by default is unset and when an ack comes and it is unset then they should just be the same as LastRTT. But if not, then calculate them by first calculating the difference:
+There should also be a way to know the expected rtt, the deviation rtt. where the expected rtt is the running average of rtts, while deviation rtt measures how much those trip times fluctuate. The expected rtt, deviation rtt by default is unset and when an ack comes and it is unset then they should just be the same as LastRTT. But if not, then calculate them by first calculating the difference:
 
 Difference = RTT - EstimatedRTT
 
@@ -767,7 +775,7 @@ To compute the DeviationRTT/RTTVAR:
 
 Deviation = Deviation + d * (abs(Difference) - Deviation)
 
-These values can later be then used if packets are continous sent/bandwidth has exceeded statistic(is is specified above on what this is, outside of congestion management). If bandwidth has exceeded statistics, then everything that is said below shall happen.
+These values can later be then used if packets are continuous sent/bandwidth has exceeded statistic(is is specified above on what this is, outside of congestion management). If bandwidth has exceeded statistics, then everything that is said below shall happen.
 
 Firstly, there must be a way to track the congestion control period, where if the sequence number has passed the next congestion control block, then next congestion control block shall be updated to be the value of the next ip dgram sequence number(the exact sequence number of the last ip datagram sent + 1), then we shall not back off in this control block so that it can be used for other stuff later on.
 
@@ -789,7 +797,7 @@ CWND = CWND + (MaxMtuExcludingUdpHeader * MaxMtuExcludingUdpHeader / CWND)
 
 #### When a Packet is Retransmitted
 
-If packets are continous sent/bandwidth has exceeded statistic and if we shouldn't back off this congestion control block(see When an ACK is Received) and if CWND is greater than the MaxMtuExcludingUdpHeader multiplied by 2 then the Slow Start Threshold shall be computed through:
+If packets are continuous sent/bandwidth has exceeded statistic and if we shouldn't back off this congestion control block(see When an ACK is Received) and if CWND is greater than the MaxMtuExcludingUdpHeader multiplied by 2 then the Slow Start Threshold shall be computed through:
 
 Slow Start Threshold = CWND / 2
 
@@ -799,7 +807,7 @@ The CWND shall be reset back to MaxMtuExcludingUdpHeader, and then we can back o
 
 #### When a NACK is Received
 
-If packets are continous sent/bandwidth has exceeded statistic and if we shouldn't back off this congestion control block(see When an ACK is Received) then the Slow Start Threshold shall be recomputed through:
+If packets are continuous sent/bandwidth has exceeded statistic and if we shouldn't back off this congestion control block(see When an ACK is Received) then the Slow Start Threshold shall be recomputed through:
 
 Slow Start Threshold = CWND / 2
 
@@ -839,7 +847,7 @@ If not, then there is no acks to buffer, so they can just be sent immediately.
 
 #### When ACKs are Sent
 
-The oldest unsent ack shall be reset to its intial value that is not a time.
+The oldest unsent ack shall be reset to its initial value that is not a time.
 
 #### When a Packet Comes
 
@@ -849,7 +857,7 @@ A sequence number hole/when there are skipped messages is when an ip dgram arriv
 
 #### Transmission Bandwidth and Retransmission Bandwidth
 
-The transmission bandwidth and the retransmission bandwidth are both used to know whether the connection shall transmit or retransmit the packets in the retransmission queue, outgoing packet queue. Getting the transmission bandwidth is simple, if UnacknowledgedBytes <= CWND then it is equals to CWND-UnacknowledgedBytes, if not then it shall be set to 0, and the reason for that should be obvious.
+The transmission bandwidth and the retransmission bandwidth are both used to know whether the connection shall transmit or retransmit the packets in the retransmission queue, outgoing packet queue. Getting the transmission bandwidth is simple, if UnacknowledgedBytes <= CWND then it is equals to CWND-UnacknowledgedBytes(and the reason for that should be clear), if not then it shall be set to 0, and the reason for that should be obvious.
 
 The transmission bandwidth is how much should be sent in this update cycle, which can be then used to send an amount of bytes(the internal packet complete size) that is lower than the transmission bandwidth and also the `maximum datagram size excluding header bytes`. (The same applies for retransmission, however instead of using the transmission bandwidth, it would just the retransmission bandwidth but transmission bandwidth also plays a role, because there shouldnt be any retransmissions if no transmissions is possible)
 
@@ -884,15 +892,15 @@ When a NACK comes and iterated through and whatever else happen and if the seque
 
 Reliable receive window is for received internal packets where it is possible to check if there are duplicates or out of bounds reliable indexes if reliable.
 
-if reliable and is not a split internal packet and the reliable index is lower than the reliable window start(0 by default) or greater than the reliable window end(2048 by default), then it is out of range. if it exists in the reliable window array then it is a duplicate internal packet.
+if reliable and is not a split internal packet and the reliable index is lower than the reliable window start(0 by default) or greater than the reliable window end(512 by default), then it is out of range. if it exists in the reliable window array then it is a duplicate internal packet.
 
 If both of what was stated above are true, then the internal packet shall be ignored. If it is none of what was stated above, then it shall be added into the reliable window array where the reliable window array is a dynamic array. It is unnecessary to put the internal packet as a value, the only thing necessary is knowing whether the reliable index is in the reliable window array.
 
 if the reliable index start is the same as the reliable index of this reliable index, then it shall be incremented until it is not a value that exists in the reliable window(with the reliable window end also increasing), while also removing from the reliable window the reliable window start value in the iteration.
 
-### Receiveing Ordering And Sequencing
+### Receiving Ordering And Sequencing
 
-The order and sequence of an internal packet must be validated before handling it, where if an internal packet is out of order(not really put of order but just like skipped or a future internal packet), it should simply be handled later on. If it is sequenced then if its out of order(the sequencing index is lower than the highest known for this channel) then it shall be dropped and the highest sequencing index shall be updated. (There can only be 32 channels, with each channel having its own thing)
+The order and sequence of an internal packet must be validated before handling it, where if an internal packet is out of order(not really out of order but just like skipped or a future internal packet), it should simply be handled later on. If it is sequenced then if its out of order(the sequencing index is lower than the highest known for this channel) then it shall be dropped and the highest sequencing index shall be updated. (There can only be 32 channels, with each channel having its own thing)
 
 Note: The internal packet must be reliable or sequenced for this section.
 
@@ -921,7 +929,7 @@ if the internal packet is not sequenced:
 
 The current internal packet shall be handled then the array that contains the ordering indexes shall be incremented (but not the same as the highest sequencing indexes). The reason for all of that is obvious, that's why they are not explained and only the way it shall be done is written. The highest sequencing index in the channel of the current internal packet shall be set back to 0 as the sequencing was broken, that is if there was any.
 
-The ordered internal packets in this channel that were out of order eariler can/should also be handled in this place where they are handled in a heap-like way(if it is a fixed array and not a heap data structure that tries to imitate a heap data structure). Then way to handle it shall be implementation specific. e.g. In RakNet, it iterates through the heap if its not empty and if the first element ordering index is the same as the one stored in the ordering indexes array, then it pops the first element consecutively, then pushes it into the array that handles the packets then if its reliable ordered it increments the ordering index for the channel in the array of that popped element. If not then it sets the highest sequencing index to be the same as the one of that popped element.
+The ordered internal packets in this channel that were out of order earlier can/should also be handled in this place where they are handled in a heap-like way(if it is a fixed array and not a heap data structure that tries to imitate a heap data structure). Then way to handle it shall be implementation specific. e.g. In RakNet, it iterates through the heap if its not empty and if the first element ordering index is the same as the one stored in the ordering indexes array, then it pops the first element consecutively, then pushes it into the array that handles the packets then if its reliable ordered it increments the ordering index for the channel in the array of that popped element. If not then it sets the highest sequencing index to be the same as the one of that popped element.
 
 -------------------------------------------------------
 
